@@ -1,0 +1,7 @@
+invoicing_app:
+    resource: "@InvoicingAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+invoicing_resource:
+    resource: "@InvoicingAppBundle/Resources/config/routing.yml"

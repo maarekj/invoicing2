@@ -1,0 +1,11 @@
+{% extends "InvoicingAppBundle:Resource:form.html.twig" %}
+
+{% set title = 'Crée un entrepreneur' %}
+
+{% set breadcrumb_first_href = path('invoicing_entrepreneur_index') %}
+{% set breadcrumb_first_text = 'Liste des entrepreneurs' %}
+{% set breadcrumb_active_text = 'Création' %}
+
+{% block form_action %}
+    {{ path('invoicing_entrepreneur_create') }}
+{% endblock %}

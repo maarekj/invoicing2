@@ -1,0 +1,15 @@
+{% extends "InvoicingAppBundle:Resource:form.html.twig" %}
+
+{% set title %}
+    Modification du entrepreneur "{{ entrepreneur.username }}"
+{% endset %}
+
+{% set breadcrumb_first_href = path('invoicing_entrepreneur_index') %}
+{% set breadcrumb_first_text = 'Liste des entrepreneurs' %}
+{% set breadcrumb_active_text = 'Modification' %}
+
+{% set form_extra_method = "PUT" %}
+    
+{% block form_action %}
+    {{ path('invoicing_entrepreneur_update', { id: entrepreneur.id }) }}
+{% endblock %}

@@ -1,0 +1,16 @@
+/web/bundles/
+/app/bootstrap.php.cache
+/app/config/parameters.yml
+/app/cache/*
+/app/config/*.local.yml
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+/build/
+/vendor/
+/bin/
+/composer.phar
+/nbproject/
+.idea/
+*~
+/web/attachments/*

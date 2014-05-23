@@ -1,0 +1,184 @@
+{% extends "InvoicingAppBundle:Resource:form.html.twig" %}
+
+{% form_theme form _self %}
+
+{% block before_form %}
+<div>
+    {% endblock %}
+
+    {% block form_display %}
+        {{ form_row(form.number) }}
+        {{ form_row(form.entrepreneur) }}
+        {{ form_row(form.client) }}
+        {{ form_row(form.tags) }}
+        {{ form_row(form.footer) }}
+        {{ form_row(form.lines) }}
+        {{ form_rest(form) }}
+    {% endblock %}
+
+    {% block after_form %}
+</div>
+{% endblock %}
+
+{% block invoicing_invoice_line_collection_widget %}
+    {% spaceless %}
+        {% if horizontal and not label_render %}
+            {% set horizontal_input_wrapper_class = horizontal_input_wrapper_class ~ ' ' ~ horizontal_label_offset_class %}
+        {% endif %}
+
+        <div class="{{ horizontal_input_wrapper_class }}" id="{{ form.vars.id }}_app" ng-controller="mainController">
+            <table class="table table-striped table-bordered table-condensed col-sm-12">
+                <colgroup>
+                    <col style="width: 40%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 16%;">
+                    <col style="width: 10%;">
+                    <col style="width: 14%;">
+                </colgroup>
+                <thead>
+                <th>Description</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Unité</th>
+                <th>Options</th>
+                <th>Total</th>
+                <th></th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="line in lines">
+                    <td><textarea class="form-control" rows="2"
+                                  ng-model="line.description" {{ _self.generateName("description") }}></textarea></td>
+                    <td><input type="text" class="form-control"
+                               ng-model="line.quantity" {{ _self.generateName("quantity") }} /></td>
+                    <td><input type="text" class="form-control"
+                               ng-model="line.unitPrice" {{ _self.generateName("unitPrice") }} /></td>
+                    <td><input type="text" class="form-control"
+                               ng-model="line.unit" {{ _self.generateName("unit") }} /></td>
+                    <td><input type="text" class="form-control"
+                               ng-model="line.options" {{ _self.generateName("options") }} /></td>
+                    <td>
+                        {{ _self.ang('(line.quantity * line.unitPrice)|currency') }}
+                        <input type="hidden"
+                               value="{{ _self.ang('line.position') }}" {{ _self.generateName("position") }} />
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button ng-disabled="$index == 0" class="btn btn-default btn-xs" ng-click="up($index)"
+                                    prevent-default>
+                                <span class="glyphicon glyphicon-arrow-up"></span>
+                            </button>
+                            <button ng-disabled="$index >= lines.length - 1" class="btn btn-default btn-xs"
+                                    ng-click="down($index)" prevent-default>
+                                <span class="glyphicon glyphicon-arrow-down"></span>
+                            </button>
+                            <button class="btn btn-danger btn-xs" ng-click="removeLine($index)" prevent-default>
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td colspan="2">{{ _self.ang("total()|currency") }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <a class="btn btn-default" ng-click="addLine()">Ajouter une ligne</a>
+        </div>
+    {% endspaceless %}
+{% endblock invoicing_invoice_line_collection_widget %}
+
+{% block invoicing_invoice_line_collection_javascript %}
+    <script type="text/javascript">
+        jQuery(function () {
+            var app = angular.module('invoicing_invoice_line_collection_app', ['ngLocale', 'preventDefault'])
+
+            app.controller('mainController', function ($scope) {
+                $scope.test = "test";
+
+                $scope.fullname = {{ form.vars.full_name|json_encode|raw }};
+
+                $scope.generateName = function (name, index) {
+                    return "" + $scope.fullname + "[" + index + "]" + "[" + name + "]";
+                };
+
+                $scope.lines = [
+                    {% for child in form %}
+                    {
+                        'description': {{ child.description.vars.value|json_encode|raw }},
+                        'quantity': {{ child.quantity.vars.value|json_encode|raw }},
+                        'unitPrice': {{ child.unitPrice.vars.value|json_encode|raw }},
+                        'options': {{ child.options.vars.value|json_encode|raw }},
+                        'position': {{ child.position.vars.value|json_encode|raw }},
+                        'unit': {{ child.unit.vars.value|json_encode|raw }},
+                    },
+                    /*
+                        {{ child.quantity.vars.value|json_encode }}
+
+                     */
+                    {% endfor %}
+                ];
+
+
+                $scope.addLine = function () {
+                    $scope.lines.push({
+                        'unit': 'unité',
+                        'unitPrice': 1,
+                        'quantity': 1,
+                        'options': 'positive',
+                        'position': $scope.lines.length
+                    });
+                    arrangeSort();
+                };
+
+                $scope.up = function (index) {
+                    var tmp = $scope.lines[index - 1];
+                    $scope.lines[index - 1] = $scope.lines[index];
+                    $scope.lines[index] = tmp;
+                    arrangeSort();
+                };
+
+                $scope.down = function (index) {
+                    var tmp = $scope.lines[index + 1];
+                    $scope.lines[index + 1] = $scope.lines[index];
+                    $scope.lines[index] = tmp;
+                    arrangeSort();
+                };
+
+                $scope.removeLine = function (index) {
+                    $scope.lines.splice(index, 1);
+                    arrangeSort();
+                };
+
+                $scope.total = function () {
+                    var total = 0;
+                    for (var i = 0; i < $scope.lines.length; i++) {
+                        var line = $scope.lines[i];
+                        total += line.unitPrice * line.quantity;
+                    }
+                    return total;
+                };
+
+                var arrangeSort = function () {
+                    for (var i = 0; i < $scope.lines.length; i++) {
+                        $scope.lines[i].position = i;
+                    }
+                };
+            });
+
+            angular.bootstrap(document.querySelector('#{{ form.vars.id }}_app'), ['invoicing_invoice_line_collection_app']);
+        });
+    </script>
+{% endblock invoicing_invoice_line_collection_javascript %}
+
+{% macro generateName(name) %}
+    name="{{ _self.ang("generateName('" ~ name ~ "', $index)") }}"
+{% endmacro %}
+{% macro ang(exp) %}{% verbatim %}{{ {% endverbatim %}{{ exp }}{% verbatim %}}}{% endverbatim %}{% endmacro %}
+
+{% block invoicing_invoice_line_collection_label %}
+    {% set widget_add_btn = null %}
+    {{ block('form_label') }}
+{% endblock invoicing_invoice_line_collection_label %}
+

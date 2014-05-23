@@ -1,0 +1,15 @@
+{% extends "InvoicingAppBundle:Resource:form.html.twig" %}
+
+{% set title %}
+    Modification du tag "{{ tag.label }}"
+{% endset %}
+
+{% set breadcrumb_first_href = path('invoicing_tag_index') %}
+{% set breadcrumb_first_text = 'Liste des tags' %}
+{% set breadcrumb_active_text = 'Modification' %}
+
+{% set form_extra_method = "PUT" %}
+    
+{% block form_action %}
+    {{ path('invoicing_tag_update', { id: tag.id }) }}
+{% endblock %}

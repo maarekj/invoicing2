@@ -1,0 +1,163 @@
+{#
+-------------------------------------------------------------------------------
+ BUTTON
+-------------------------------------------------------------------------------
+#}
+{% macro btn(opt) %}
+    {% import _self as self %}
+    <a href="{{ opt.href|default('#') }}"
+        {{ self.btnCls(opt) }}
+        {{ self.attrs(opt.attrs|default({})) }}>
+        {{ self.btnIcon(opt) }}
+        {{ opt.text|default('') }}
+    </a>
+{% endmacro %}
+
+{% macro btnForm(opt) %}
+    {% import _self as self %}
+    {% set id = opt.id|default('btn-form-' ~ random() ~ random()) %}
+    <form method="post" action="{{ opt.action }}" class="inline"
+        {{ self.btnId(opt) }}
+        {{ self.btnConfirm(opt) }}>
+        <input type="hidden" name="_method" value="{{ opt.method|upper }}" />
+        <button type="submit" {{ self.btnCls(opt) }} {{ self.attrs(opt.attrs|default({})) }}>
+            {{ self.btnIcon(opt) }}
+            {{ opt.text|default('') }}
+        </button>
+    </form>
+{% endmacro %}
+
+{% macro btnId(opt) %}
+{% endmacro %}
+
+{% macro btnConfirm(opt) %}
+{% if opt.confirm is defined %}
+onsubmit="return confirm('{{ opt.confirm|e }}');"
+{% endif %}
+{% endmacro %}
+
+{% macro btnCls(opt) %}
+{% set size %}
+{% if opt.size is defined %}btn-{{ opt.size }}{% endif %}
+{% endset %}
+class="btn btn-{{ opt.color|default('default') }} {{ size }} {{ opt.cls|default('') }}"
+{% endmacro %}
+
+{% macro btnIcon(opt) %}
+{% import _self as self %}
+{% if opt.icon is defined %}
+    {{ self.icon(opt.icon) }}
+{% endif %}
+{% endmacro %}
+
+{% macro attrs(attrs) %}
+{% for key, value in attrs %}
+{{ key }}="{{ value|e('html_attr') }}" 
+{% endfor %}
+{% endmacro %}
+
+{#
+-------------------------------------------------------------------------------
+ ICON
+-------------------------------------------------------------------------------
+#}
+{% macro icon(icon) %}
+<span class="glyphicon glyphicon-{{ icon }}"></span>
+{% endmacro %}
+
+
+{#
+-------------------------------------------------------------------------------
+ LABEL
+-------------------------------------------------------------------------------
+#}  
+{% macro label(text, color) %}
+    {% set colors = {
+        blue: 'primary',
+        lightblue: 'info',
+        orange: 'warning',
+        gray: 'default',
+        red:'danger',
+        green: 'success',
+    } %}
+    {% set color = colors[color]|default(color) %}    
+    <span class="label label-{{ color }}">{{ text }}</span>
+{% endmacro %}
+    
+{#
+-------------------------------------------------------------------------------
+ BADGES
+-------------------------------------------------------------------------------
+#}  
+{% macro badge(text) %}
+    <span class="badge">{{ text }}</span>
+{% endmacro %}
+    
+    
+{#
+-------------------------------------------------------------------------------
+ Client
+-------------------------------------------------------------------------------
+#}
+{% macro printPropertyWithBr(object, property, label) %}
+    {% if attribute(object, property) != null %}
+        {% if label != null %}
+            <strong>{{ label }}:</strong>
+        {% endif %}
+        {{ attribute(object, property) }}<br />
+    {% endif %}
+{% endmacro %}
+
+{% macro clientPopover(client, url) %}
+    {% set title = client.raisonSociale %}
+    {% set content %}
+        <p>
+            {{ _self.printPropertyWithBr(client, 'signataire', 'Signataire') }}
+            {{ _self.printPropertyWithBr(client, 'telephone', 'Tel') }}
+            {{ _self.printPropertyWithBr(client, 'mobile', 'Mobile') }}
+            {{ _self.printPropertyWithBr(client, 'email', 'Email') }}
+            {{ _self.printPropertyWithBr(client, 'adresse', 'Adresse') }}
+            {{ _self.printPropertyWithBr(client, 'ville', 'Ville') }}
+            {{ _self.printPropertyWithBr(client, 'codePostal', 'Code postal') }}
+            {{ _self.printPropertyWithBr(client, 'complementAdresse', 'Complement d\'adresse') }}
+            {{ _self.printPropertyWithBr(client, 'web', 'Site web') }}
+            {{ _self.printPropertyWithBr(client, 'sav', 'SAV') }}
+        </p>
+    {% endset %}
+    <a id="link-popover-client-{{ client.id }}" href="{{ url|default('#') }}">
+        {{ client.raisonSociale }}
+    </a>
+    <script>
+        jQuery(function($) {
+            $('#link-popover-client-{{ client.id }}').popover({
+                trigger: 'hover',
+                title: '{{ title|e('js') }}',
+                content: '{{ content|e('js') }}',
+                html: true
+            });
+        });
+    </script>
+{% endmacro %}
+    
+{#
+-------------------------------------------------------------------------------
+ Sorting
+-------------------------------------------------------------------------------
+#}
+{% macro sorting(label, route, sorting, extraParams) %}
+    {% set currentOrder = attribute(app.request.get('sorting'), sorting)|default('none')|lower %}
+
+    {% set params = extraParams|default({})|merge({
+        "sorting": {
+            (sorting): currentOrder|lower == 'asc' ? 'desc' : 'asc'
+        }
+    }) %}
+    <a href="{{ path(route, params) }}">
+        {{ label|raw }}
+        {% if currentOrder == 'desc' %}
+            <span class="glyphicon glyphicon-chevron-down"></span>
+        {% elseif currentOrder == 'asc' %}
+            <span class="glyphicon glyphicon-chevron-up"></span>
+        {% endif %}
+    </a>
+{% endmacro %}

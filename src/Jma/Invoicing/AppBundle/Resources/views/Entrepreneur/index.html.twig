@@ -1,0 +1,66 @@
+{% extends "InvoicingAppBundle:Resource:list.html.twig" %}
+{% import "InvoicingAppBundle::common.html.twig" as common %}
+
+{% set title = 'Liste des entrepreneurs' %}
+{% set filter_action = path('invoicing_entrepreneur_index') %}
+{% set filter_reinit = path('invoicing_entrepreneur_index', { reinit:'reinit' }) %}
+
+{% block content_content %}
+    <table class="table table-bordered table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Login</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>SIREN</th>
+                <th>SIRET</th>
+                <th>Ville</th>
+                <th>Code postal</th>
+                <th>Téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entrepreneur in entrepreneurs %}
+                <tr class="{{ app.request.get('id') == entrepreneur.id ? 'active' : '' }}">
+                    <td>
+                        {{ common.btn({
+                            'href': path('invoicing_entrepreneur_update', { id: entrepreneur.id }),
+                            'color': 'primary',
+                            'icon': 'edit',
+                            'size': 'sm'
+                        }) }}
+                        {{ common.btnForm({
+                            'action': path('invoicing_entrepreneur_delete', { id: entrepreneur.id }),
+                            'method': 'delete',
+                            'confirm': 'Êtes-vous sur ?',
+                            'color': 'danger',
+                            'icon': 'trash',
+                            'size': 'sm'
+                        }) }}
+                    </td>
+                    <td>{{ entrepreneur.username }}</td>
+                    <td>{{ entrepreneur.lastname }}</td>
+                    <td>{{ entrepreneur.firstname }}</td>
+                    <td>{{ entrepreneur.siren }}</td>
+                    <td>{{ entrepreneur.siret }}</td>
+                    <td>{{ entrepreneur.city }}</td>
+                    <td>{{ entrepreneur.zipcode }}</td>
+                    <td>{{ entrepreneur.phone }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {{ pagerfanta(entrepreneurs) }}
+    
+{% endblock %}
+
+{% block panel_action %}
+    {{ common.btn({
+        'href': path('invoicing_entrepreneur_create'),
+        'text': 'Ajouter un entrepreneur',
+        'icon': 'plus',
+        'cls': 'btn-block'
+    }) }}
+{% endblock %}

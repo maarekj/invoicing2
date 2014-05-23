@@ -1,0 +1,48 @@
+{% block select2_entity_widget %}
+    {% set attr = attr|merge({'class': attr.class|default('col-lg-12 select2_entity_select')}) %}
+    <div class="{{ horizontal_input_wrapper_class|default('col-sm-9') }}">
+        {{ block('select2_entity_select') }}
+    </div>
+{% endblock %}
+
+{% block filter_entity_widget %}
+    {% set attr = attr|merge({'class': attr.class|default('col-lg-12 select2_entity_select')}) %}
+    <div class="{{ horizontal_input_wrapper_class|default('col-sm-9') }}">
+        {{ block('select2_entity_select') }}
+        {{ block('select2_entity_javascript') }}
+    </div>
+{% endblock %}
+
+{% block select2_entity_javascript %}
+    <script type="text/javascript">
+        jQuery(function () {
+            $field = jQuery('#{{ id }}');
+            var configs = {{ select2_config|default({})|json_encode|raw }};
+
+            $field.select2(configs);
+        });
+    </script>
+{% endblock %}
+    
+{% block select2_entity_select %}
+    {% spaceless %}
+        {% if required and empty_value is none and not empty_value_in_choices %}
+            {% set required = false %}
+        {% endif %}
+        <select {{ block('select2_entity_widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {% if empty_value is not none %}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+            {% endif %}
+            {% for group_label, choice in choices %}
+                <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+            {% endfor %}
+        </select>
+    {% endspaceless %}
+{% endblock %}
+    
+{% block select2_entity_widget_attributes %}
+    {% spaceless %}
+        id="{{ id }}" name="{{ full_name }}"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
+        {% for attrname, attrvalue in attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
+    {% endspaceless %}
+{% endblock %}

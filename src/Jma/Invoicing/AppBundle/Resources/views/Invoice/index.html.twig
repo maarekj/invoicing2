@@ -1,0 +1,69 @@
+{% extends "InvoicingAppBundle:Resource:list.html.twig" %}
+{% import "InvoicingAppBundle::common.html.twig" as common %}
+{% import "InvoicingAppBundle:Tag:macros.html.twig" as tag %}
+
+{% set title = 'Liste des factures' %}
+{% set filter_action = path('invoicing_invoice_index') %}
+{% set filter_reinit = path('invoicing_invoice_index', { reinit:'reinit' }) %}
+
+{% block content_content %}
+    <table class="table table-bordered table-condensed table-responsive">
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>{{ common.sorting('Numero', 'invoicing_invoice_index', 'number') }}</th>
+            <th>Tags</th>
+            {% if is_granted("ROLE_ADMIN") %}
+                <th>{{ common.sorting('Entrepreneur', 'invoicing_invoice_index', 'entrepreneur.username') }}</th>
+            {% endif %}
+            <th>{{ common.sorting('Client', 'invoicing_invoice_index', 'client.name') }}</th>
+            <th>Montant HT</th>
+            <th>{{ common.sorting('Date de création', 'invoicing_invoice_index', 'created') }}</th>
+            <th>{{ common.sorting('Date de modification', 'invoicing_invoice_index', 'updated') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+            <tr class="{{ app.request.get('id') == invoice.id ? 'active' : '' }}">
+                <td>
+                    {{ common.btn({
+                    'href': path('invoicing_invoice_update', { id: invoice.id }),
+                    'color': 'primary',
+                    'icon': 'edit',
+                    'size': 'sm'
+                    }) }}
+                    {{ common.btnForm({
+                    'action': path('invoicing_invoice_delete', { id: invoice.id }),
+                    'method': 'delete',
+                    'confirm': 'Êtes-vous sur ?',
+                    'color': 'danger',
+                    'icon': 'trash',
+                    'size': 'sm'
+                    }) }}
+                </td>
+                <td>{{ invoice.number }}</td>
+                <td>{{ tag.tags(invoice.tags) }}</td>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <td>{{ invoice.entrepreneur.username }}</td>
+                {% endif %}
+                <td>{{ invoice.client.name }}</td>
+                <td>{{ invoice.total }} €</td>
+                <td>{{ invoice.created|date('d/m/Y') }}</td>
+                <td>{{ invoice.updated|date('d/m/Y') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ pagerfanta(invoices) }}
+
+{% endblock %}
+
+{% block panel_action %}
+    {{ common.btn({
+    'href': path('invoicing_invoice_create'),
+    'text': 'Ajouter une facture',
+    'icon': 'plus',
+    'cls': 'btn-block'
+    }) }}
+{% endblock %}

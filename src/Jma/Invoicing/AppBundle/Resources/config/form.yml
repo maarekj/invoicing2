@@ -1,0 +1,33 @@
+services:
+    jma.invoicing.form_type.client:
+        class: Jma\Invoicing\AppBundle\Form\ClientType
+        tags:
+            - { name: form.type, alias: invoicing_client }
+
+    jma.invoicing.form_type.entrepreneur:
+        class: Jma\Invoicing\AppBundle\Form\EntrepreneurType
+        tags:
+            - { name: form.type, alias: invoicing_entrepreneur }
+
+    jma.invoicing.form_type.invoice:
+        class: Jma\Invoicing\AppBundle\Form\InvoiceType
+        tags:
+            - { name: form.type, alias: invoicing_invoice }
+
+    jma.invoicing.form_type.invoice_line:
+        class: Jma\Invoicing\AppBundle\Form\InvoiceLineType
+        tags:
+            - { name: form.type, alias: invoicing_invoice_line }
+
+
+    jma.invoicing.form_type.invoice_line_collection:
+        class: Jma\Invoicing\AppBundle\Form\InvoiceLineCollectionType
+        tags:
+            - { name: form.type, alias: invoicing_invoice_line_collection }
+
+    jma.invoicing.form_type.tag:
+        class: Jma\Invoicing\AppBundle\Form\TagType
+        arguments:
+            - @security.context
+        tags:
+            - { name: form.type, alias: invoicing_tag}

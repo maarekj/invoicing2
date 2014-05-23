@@ -1,0 +1,14 @@
+{% extends "MopaBootstrapBundle:Form:fields.html.twig" %}
+
+{% block form_widget %}
+{% if horizontal and not label_render %}
+    {% set horizontal_input_wrapper_class = horizontal_input_wrapper_class ~ ' ' ~ horizontal_label_offset_class %}
+{% endif %}
+{% if form|length > 0 %}
+    <div class="{{ horizontal_input_wrapper_class }}">
+        {{ parent() }}
+    </div>
+{% else %}
+    {{ parent() }}
+{% endif %}
+{% endblock form_widget %}

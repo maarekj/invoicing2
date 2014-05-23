@@ -1,0 +1,72 @@
+{
+    "license": "MIT",
+    "type": "project",
+    "description": "The \"Symfony Standard Edition\" distribution",
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "jma/resource-bundle": "dev-master",
+        "symfony/symfony": "~2.5@dev",
+        "doctrine/orm": "~2.4@dev",
+        "doctrine/doctrine-bundle": "~1.2@dev",
+        "twig/extensions": "~1.0@dev",
+        "symfony/assetic-bundle": "~2.3@dev",
+        "symfony/swiftmailer-bundle": "~2.3@dev",
+        "symfony/monolog-bundle": "~2.3@dev",
+        "sensio/distribution-bundle": "~2.3@dev",
+        "sensio/framework-extra-bundle": "~3.0@dev",
+        "sensio/generator-bundle": "~2.3@dev",
+        "mopa/bootstrap-bundle": "~3.0.0",
+        "twbs/bootstrap": "~3.0.0",
+        "knplabs/knp-menu-bundle": "~2.0@dev",
+        "knplabs/knp-menu": "~2.0@dev",
+        "sylius/resource-bundle": "~0.9@dev",
+        "doctrine/doctrine-fixtures-bundle": "~2.2@dev",
+        "genemu/form-bundle": "~2.2@dev",
+        "willdurand/faker-bundle": "@stable",
+        "jms/di-extra-bundle": "~1.4",
+        "stof/doctrine-extensions-bundle": "~1.1@dev",
+        "lexik/form-filter-bundle": "~2.0@dev",
+        "ensepar/html2pdf-bundle": "~1.0",
+        "coresphere/console-bundle": "dev-master",
+        "knplabs/knp-gaufrette-bundle": "~0.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2@dev"
+    },
+    "scripts": {
+        "post-install-cmd": [
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-update-cmd": [
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "heroku": {
+            "framework": "symfony2",
+            "document-root": "web",
+            "php-config": [
+                "date.timezone=Europe/Paris",
+                "display_errors=off",
+                "short_open_tag=off"
+            ]
+        }
+    }
+}

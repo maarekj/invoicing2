@@ -1,0 +1,3 @@
+sav:
+    command:
+        send_email: Envoi de %state% par email, éffectué avec succès

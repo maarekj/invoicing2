@@ -1,0 +1,11 @@
+{% extends "InvoicingAppBundle:Resource:form.html.twig" %}
+
+{% set title = 'Crée un client' %}
+
+{% set breadcrumb_first_href = path('invoicing_client_index') %}
+{% set breadcrumb_first_text = 'Liste des clients' %}
+{% set breadcrumb_active_text = 'Création' %}
+
+{% block form_action %}
+    {{ path('invoicing_client_create') }}
+{% endblock %}

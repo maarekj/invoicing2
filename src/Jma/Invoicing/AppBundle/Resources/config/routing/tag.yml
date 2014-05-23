@@ -1,0 +1,32 @@
+invoicing_tag_create:
+    pattern: /tags/new
+    methods: [GET, POST]
+    defaults:
+        _controller: invoicing.controller.tag:createAction
+        _sylius:
+            redirect: invoicing_tag_index
+
+invoicing_tag_update:
+    pattern: /tags/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: invoicing.controller.tag:updateAction
+        _sylius:
+            redirect: invoicing_tag_index
+
+invoicing_tag_delete:
+    pattern: /tags/{id}
+    methods: [DELETE]
+    defaults:
+        _controller: invoicing.controller.tag:deleteAction
+            
+invoicing_tag_index:
+    pattern: /tags
+    methods: [GET, POST]
+    defaults:
+        _controller: invoicing.controller.tag:indexAction
+        _sylius:
+            criteria:
+                current_entrepreneur: true
+            paginate: 50
+            sortable: true

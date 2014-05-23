@@ -1,0 +1,6 @@
+{% block filter_month_widget %}
+    <div class="{{ horizontal_input_wrapper_class|default('col-sm-9') }}">
+        {{ form_widget(form.month, {'horizontal_input_wrapper_class': ""}) }}
+        {{ form_widget(form.year, {'horizontal_input_wrapper_class': ""}) }}
+    </div>
+{% endblock %}

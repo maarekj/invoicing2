@@ -1,0 +1,15 @@
+{% extends "InvoicingAppBundle:Invoice:form.html.twig" %}
+
+{% set title %}
+    Modification de la facture "{{ invoice.number }}"
+{% endset %}
+
+{% set breadcrumb_first_href = path('invoicing_invoice_index') %}
+{% set breadcrumb_first_text = 'Liste des invoices' %}
+{% set breadcrumb_active_text = 'Modification' %}
+
+{% set form_extra_method = "PUT" %}
+    
+{% block form_action %}
+    {{ path('invoicing_invoice_update', { id: invoice.id }) }}
+{% endblock %}

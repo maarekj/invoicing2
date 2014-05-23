@@ -1,0 +1,58 @@
+{% extends "InvoicingAppBundle::base.html.twig" %}
+{% import "InvoicingAppBundle::common.html.twig" as common %}
+
+{% block foot_script %}
+{{parent()}}
+{{ form_javascript(form) }}
+{% endblock %}
+
+{% block head_style %}
+{{parent()}}
+{{ form_stylesheet(form) }}
+{% endblock %}
+
+{% block content_content %}
+    {% block breadcrumb %}
+        <ul class="breadcrumb">
+            {% block breadcrumb_first %}
+                <li><a href="{{ breadcrumb_first_href|default('#') }}">{{ breadcrumb_first_text|default('Liste') }}</a></li>
+            {% endblock %}
+            {% block breadcrumb_active %}
+                <li class="active">{{ breadcrumb_active_text|default('Form') }}</li>
+            {% endblock %}
+            {% block breadcrumb_rest %}
+            {% endblock %}
+        </ul>
+    {% endblock %}
+
+    {% block before_form %}
+    {% endblock %}
+
+    {% block form %}
+        <form action="{% block form_action %}{% endblock %}" method="post" class="form-horizontal" {{ form_enctype(form) }}>
+            {% block form_inner %}
+                {% block form_display %}
+                    {{ form_rest(form) }}
+                {% endblock %}
+
+                {% if form_extra_method is defined %}
+                    <input type="hidden" name="_method" value="{{ form_extra_method }}" />
+                {% endif %}
+
+                {% block form_submit %}
+                    <div class="form-group">
+                        <div class="col-lg-offset-3 col-lg-9">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                {% endblock %}
+            {% endblock %}
+        </form>
+    {% endblock %}
+
+    {% block after_form %}
+    {% endblock %}
+{% endblock %}
+
+{% block content_sidebar %}
+{% endblock %}

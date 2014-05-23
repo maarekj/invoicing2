@@ -1,0 +1,11 @@
+{% extends "InvoicingAppBundle:Resource:form.html.twig" %}
+
+{% set title = 'Crée un tag' %}
+
+{% set breadcrumb_first_href = path('invoicing_tag_index') %}
+{% set breadcrumb_first_text = 'Liste des tags' %}
+{% set breadcrumb_active_text = 'Création' %}
+
+{% block form_action %}
+    {{ path('invoicing_tag_create') }}
+{% endblock %}

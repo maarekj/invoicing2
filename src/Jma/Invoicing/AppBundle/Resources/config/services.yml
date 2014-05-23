@@ -1,0 +1,7 @@
+parameters:
+    invoicing_user_provider.class: Jma\Invoicing\AppBundle\Security\User\UserProvider
+
+services:
+    invoicing_user_provider:
+        class: %invoicing_user_provider.class%
+        arguments: [ @invoicing.repository.entrepreneur, %invoicing_user_provider.users% ]

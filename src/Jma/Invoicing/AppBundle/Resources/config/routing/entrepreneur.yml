@@ -1,0 +1,32 @@
+invoicing_entrepreneur_create:
+    pattern: /entrepreneurs/new
+    methods: [GET, POST]
+    defaults:
+        _controller: invoicing.controller.entrepreneur:createAction
+        _sylius:
+            redirect: invoicing_entrepreneur_index
+
+invoicing_entrepreneur_update:
+    pattern: /entrepreneurs/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: invoicing.controller.entrepreneur:updateAction
+        _sylius:
+            redirect: invoicing_entrepreneur_index
+
+invoicing_entrepreneur_delete:
+    pattern: /entrepreneurs/{id}
+    methods: [DELETE]
+    defaults:
+        _controller: invoicing.controller.entrepreneur:deleteAction
+            
+invoicing_entrepreneur_index:
+    pattern: /entrepreneurs
+    methods: [GET, POST]
+    defaults:
+        _controller: invoicing.controller.entrepreneur:indexAction
+        _sylius:
+            criteria:
+                current_entrepreneur: true
+            paginate: 10
+            sortable: true

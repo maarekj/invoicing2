@@ -1,0 +1,68 @@
+{% extends "InvoicingAppBundle:Resource:list.html.twig" %}
+{% import "InvoicingAppBundle::common.html.twig" as common %}
+
+{% set title = 'Liste des clients' %}
+{% set filter_action = path('invoicing_client_index') %}
+{% set filter_reinit = path('invoicing_client_index', { reinit:'reinit' }) %}
+
+{% block content_content %}
+    <table class="table table-bordered table-condensed table-responsive">
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>Nom</th>
+            <th>Rue</th>
+            <th>Ville</th>
+            <th>Code postal</th>
+            <th>Complement</th>
+            <th>Forme légale</th>
+            {% if is_granted("ROLE_ADMIN") %}
+                <th>Entrepreneur</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for client in clients %}
+            <tr class="{{ app.request.get('id') == client.id ? 'active' : '' }}">
+                <td>
+                    {{ common.btn({
+                    'href': path('invoicing_client_update', { id: client.id }),
+                    'color': 'primary',
+                    'icon': 'edit',
+                    'size': 'sm'
+                    }) }}
+                    {{ common.btnForm({
+                    'action': path('invoicing_client_delete', { id: client.id }),
+                    'method': 'delete',
+                    'confirm': 'Êtes-vous sur ?',
+                    'color': 'danger',
+                    'icon': 'trash',
+                    'size': 'sm'
+                    }) }}
+                </td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.street }}</td>
+                <td>{{ client.city }}</td>
+                <td>{{ client.zipcode }}</td>
+                <td>{{ client.complement }}</td>
+                <td>{{ client.legalForm }}</td>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <td>{{ client.entrepreneur.username|default("") }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ pagerfanta(clients) }}
+
+{% endblock %}
+
+{% block panel_action %}
+    {{ common.btn({
+    'href': path('invoicing_client_create'),
+    'text': 'Ajouter un client',
+    'icon': 'plus',
+    'cls': 'btn-block'
+    }) }}
+{% endblock %}

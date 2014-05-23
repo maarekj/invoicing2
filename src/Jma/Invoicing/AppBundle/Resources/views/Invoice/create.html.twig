@@ -1,0 +1,11 @@
+{% extends "InvoicingAppBundle:Invoice:form.html.twig" %}
+
+{% set title = 'Crée une facture' %}
+
+{% set breadcrumb_first_href = path('invoicing_invoice_index') %}
+{% set breadcrumb_first_text = 'Liste des factures' %}
+{% set breadcrumb_active_text = 'Création' %}
+
+{% block form_action %}
+    {{ path('invoicing_invoice_create') }}
+{% endblock %}

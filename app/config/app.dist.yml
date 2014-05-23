@@ -1,0 +1,4 @@
+invoicing_app:
+    users:
+        admin: { password: d033e22ae348aeb5660fc2140aec35850c4da997, roles: [ROLE_SUPER_ADMIN] }
+        jojo: { password: 13de8889aecf8f48d9c799a1f3fb520fa748372a, roles: [ROLE_ENTREPRENEUR] }

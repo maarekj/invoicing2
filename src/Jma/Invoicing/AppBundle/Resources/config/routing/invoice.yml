@@ -1,0 +1,38 @@
+invoicing_invoice_create:
+    pattern: /invoices/new
+    methods: [GET, POST]
+    defaults:
+        _controller: invoicing.controller.invoice:createAction
+        _sylius:
+            redirect: invoicing_invoice_index
+
+invoicing_invoice_update:
+    pattern: /invoices/{id}/edit
+    methods: [GET, PUT]
+    defaults:
+        _controller: invoicing.controller.invoice:updateAction
+        _sylius:
+            redirect: invoicing_invoice_index
+
+invoicing_invoice_delete:
+    pattern: /invoices/{id}
+    methods: [DELETE]
+    defaults:
+        _controller: invoicing.controller.invoice:deleteAction
+            
+invoicing_invoice_index:
+    pattern: /invoices
+    methods: [GET, POST]
+    defaults:
+        _controller: invoicing.controller.invoice:indexFilterableAction
+        _sylius:
+            criteria:
+                _join:
+                    - lines
+                    - client
+                    - entrepreneur
+                current_entrepreneur: true
+            paginate: 20
+            sortable: true
+            sorting:
+                created: desc

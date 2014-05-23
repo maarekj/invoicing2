@@ -1,0 +1,30 @@
+parameters:
+#    jma_bootstrap.example.class: Jma\BootstrapBundle\Example
+
+services:
+    jma_bootstrap.serializer.handler.pagerfanta:
+        class: Jma\BootstrapBundle\Serializer\PagerfantaHandler
+        arguments:
+            - %jma_bootstrap.json.pagerfanta%
+        tags:
+            -
+                name: jms_serializer.handler
+                type: Pagerfanta\Pagerfanta
+                format: json
+                direction: serialization
+                method: serializePagerfantaToJson
+                
+    jma_bootstrap.form.select2_entity:
+        class: Jma\BootstrapBundle\Form\Type\Select2EntityType
+        tags:
+            - { name: form.type, alias: select2_entity }
+
+    jma_bootstrap.listener.security_controller_listener:
+        class: Jma\BootstrapBundle\Listener\SecurityControllerListener
+        arguments:
+            - @security.context
+            - @sensio_framework_extra.security.expression_language
+            - @security.authentication.trust_resolver
+            - @security.role_hierarchy
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

@@ -1,0 +1,56 @@
+{% extends "InvoicingAppBundle:Resource:list.html.twig" %}
+{% import "InvoicingAppBundle::common.html.twig" as common %}
+
+{% set title = 'Liste des tags' %}
+{% set filter_action = path('invoicing_tag_index') %}
+{% set filter_reinit = path('invoicing_tag_index', { reinit:'reinit' }) %}
+
+{% block content_content %}
+    <table class="table table-bordered table-condensed table-responsive">
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>Nom</th>
+            <th>Couleur</th>
+            <th>Entrepreneur</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags %}
+            <tr class="{{ app.request.get('id') == tag.id ? 'active' : '' }}">
+                <td>
+                    {{ common.btn({
+                    'href': path('invoicing_tag_update', { id: tag.id }),
+                    'color': 'primary',
+                    'icon': 'edit',
+                    'size': 'sm'
+                    }) }}
+                    {{ common.btnForm({
+                    'action': path('invoicing_tag_delete', { id: tag.id }),
+                    'method': 'delete',
+                    'confirm': 'Êtes-vous sur ?',
+                    'color': 'danger',
+                    'icon': 'trash',
+                    'size': 'sm'
+                    }) }}
+                </td>
+                <td>{{ tag.label }}</td>
+                <td>{{ tag.color }}</td>
+                <td>{{ tag.entrepreneur.username|default("") }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ pagerfanta(tags) }}
+
+{% endblock %}
+
+{% block panel_action %}
+    {{ common.btn({
+    'href': path('invoicing_tag_create'),
+    'text': 'Ajouter un tag',
+    'icon': 'plus',
+    'cls': 'btn-block'
+    }) }}
+{% endblock %}

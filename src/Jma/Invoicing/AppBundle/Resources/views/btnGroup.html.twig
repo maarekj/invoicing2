@@ -1,0 +1,14 @@
+{% import "InvoicingAppBundle::common.html.twig" as common %}
+
+{% set divCls = divCls|default('') ~ ' btn-group' %}
+<div class="{{ divCls }}">
+    {% set cls = btn.cls|default('') ~ ' dropdown-toggle' %}
+    {% set btn = btn|merge({cls: cls}) %}
+    <button type="button" {{ common.btnCls(btn) }} data-toggle="dropdown">
+        {{ common.btnIcon(btn) }} {{ btn.text|default('') }}<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        {% block inner %}
+        {% endblock %}
+    </ul>
+</div>

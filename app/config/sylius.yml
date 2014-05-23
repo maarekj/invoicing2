@@ -1,0 +1,33 @@
+jma_resource:
+    resources:
+        invoicing.client:
+            driver: jma/doctrine/orm
+            templates: InvoicingAppBundle:Client
+            classes:
+                controller: Jma\ResourceBundle\Controller\ResourceController
+                model: Jma\Invoicing\AppBundle\Entity\Client
+                repository: Jma\Invoicing\AppBundle\Repository\ClientRepository
+
+        invoicing.entrepreneur:
+            driver: jma/doctrine/orm
+            templates: InvoicingAppBundle:Entrepreneur
+            classes:
+                controller: Jma\ResourceBundle\Controller\ResourceController
+                model: Jma\Invoicing\AppBundle\Entity\Entrepreneur
+                repository: Jma\Invoicing\AppBundle\Repository\EntrepreneurRepository
+
+        invoicing.invoice:
+            driver: jma/doctrine/orm
+            templates: InvoicingAppBundle:Invoice
+            classes:
+                controller: Jma\Invoicing\AppBundle\Controller\InvoiceController
+                model: Jma\Invoicing\AppBundle\Entity\Invoice
+                repository: Jma\Invoicing\AppBundle\Repository\InvoiceRepository
+
+        invoicing.tag:
+            driver: jma/doctrine/orm
+            templates: InvoicingAppBundle:Tag
+            classes:
+                controller: Jma\ResourceBundle\Controller\ResourceController
+                model: Jma\Invoicing\AppBundle\Entity\Tag
+                repository: Jma\Invoicing\AppBundle\Repository\TagRepository
