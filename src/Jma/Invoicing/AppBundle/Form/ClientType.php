@@ -30,6 +30,7 @@ class ClientType extends AbstractType
             ->add('zipcode')
             ->add('complement')
             ->add('legalForm')
+            ->add('phone')
             ->add('more');
     }
 

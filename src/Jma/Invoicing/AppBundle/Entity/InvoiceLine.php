@@ -32,33 +32,38 @@ class InvoiceLine
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @NotNull()
      */
     protected $description;
 
     /**
      * @ORM\Column(type="float", nullable=false)
+     * @NotNull()
      */
     protected $quantity;
 
     /**
      * @ORM\Column(type="float", nullable=false)
+     * @NotNull()
      */
     protected $unitPrice;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $unit;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @NotNull()
      */
     protected $options;
 
     /**
      * @ORM\Column(type="integer", nullable=false)
+     * @NotNull()
      */
     protected $position;
 

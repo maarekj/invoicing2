@@ -11,6 +11,7 @@
         {{ form_row(form.entrepreneur) }}
         {{ form_row(form.client) }}
         {{ form_row(form.tags) }}
+        {{ form_row(form.created) }}
         {{ form_row(form.footer) }}
         {{ form_row(form.lines) }}
         {{ form_rest(form) }}
@@ -114,7 +115,7 @@
                         'unit': {{ child.unit.vars.value|json_encode|raw }},
                     },
                     /*
-                        {{ child.quantity.vars.value|json_encode }}
+                    {{ child.quantity.vars.value|json_encode }}
 
                      */
                     {% endfor %}

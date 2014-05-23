@@ -41,6 +41,11 @@ class InvoiceType extends AbstractType
                     return $repository->builderAllRestrictByCurrentEntrepreneur();
                 }
             ))
+            ->add('created', 'date', array(
+                'label' => 'Date de création',
+                'widget' => 'single_text',
+                'required' => false,
+            ))
             ->add('footer', 'textarea', array(
                 'required' => false
             ))
