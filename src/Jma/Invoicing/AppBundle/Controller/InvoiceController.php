@@ -8,6 +8,7 @@
 
 namespace Jma\Invoicing\AppBundle\Controller;
 
+use Jma\Invoicing\AppBundle\Entity\Invoice;
 use Jma\ResourceBundle\Controller\ResourceController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,5 +40,15 @@ class InvoiceController extends ResourceController
             ->setData($this->updateTemplateExtraData($request, $templateData));
 
         return $this->handleView($view);
+    }
+
+    public function createNew()
+    {
+        /** @var $invoice Invoice */
+        $invoice = parent::createNew();
+
+        $invoice->setNumber($this->getRepository()->getNextNumber());
+
+        return $invoice;
     }
 } 
