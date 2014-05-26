@@ -24,6 +24,10 @@ monolog:
         #    type:  chromephp
         #    level: debug
 
+doctrine:
+    dbal:
+        dbname:   %database_name%_test
+
 assetic:
     use_controller: true
     
