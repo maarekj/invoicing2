@@ -4,6 +4,7 @@ namespace Jma\Invoicing\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Description of InvoiceLine
@@ -15,6 +16,8 @@ use Symfony\Component\Validator\Constraints\NotNull;
  */
 class InvoiceLine
 {
+    const OPTIONS_POSITIVE = "positive";
+    const OPTIONS_NEGATIVE = "negative";
 
     /**
      * @ORM\Id
@@ -70,7 +73,11 @@ class InvoiceLine
 
     public function getTotal()
     {
-        return $this->quantity * $this->getUnitPrice();
+        if ($this->getOptions() === self::OPTIONS_NEGATIVE) {
+            return -($this->quantity * $this->getUnitPrice());
+        } else {
+            return $this->quantity * $this->getUnitPrice();
+        }
     }
 
     // GETTER / SETTER

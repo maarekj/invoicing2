@@ -2,6 +2,7 @@
 
 namespace Jma\Invoicing\AppBundle\Form;
 
+use Jma\Invoicing\AppBundle\Entity\InvoiceLine;
 use Jma\Invoicing\AppBundle\Repository\ClientRepository;
 use Jma\Invoicing\AppBundle\Repository\EntrepreneurRepository;
 use Symfony\Component\Form\AbstractType;
@@ -22,7 +23,13 @@ class InvoiceLineType extends AbstractType
             ->add('description', 'text', array('required' => true))
             ->add('quantity', 'number', array('required' => true))
             ->add('unitPrice', 'number', array('required' => true))
-            ->add('options', 'text', array('required' => true))
+            ->add('options', 'choice', array(
+                'required' => true,
+                'choices' => array(
+                    InvoiceLine::OPTIONS_POSITIVE => "+",
+                    InvoiceLine::OPTIONS_NEGATIVE => "-",
+                )
+            ))
             ->add('unit', 'text', array('required' => true))
             ->add('position', 'integer', array('required' => true));
 

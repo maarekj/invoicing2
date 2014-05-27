@@ -1,17 +1,4 @@
 services:
-    invoicing.frontend.navbar:
-        class: %mopa_bootstrap.navbar.generic%
-        arguments:
-            # first argument: a named array of menues:
-            - { leftmenu: "@invoicing.frontend_menu=", rightmenu: "@invoicing.frontend_dropdown_menu=" }
-            # second argument: a named array of FormType Classes  
-            - { }
-            # third argument: a named array of options
-            - { title: "SAV", titleRoute: "homepage", fixedTop: true }
-        tags:
-            # The alias is used to retrieve the navbar in templates
-            - { name: mopa_bootstrap.navbar, alias: frontendNavbar }
-      
     invoicing.menu_builder:
         class: Jma\Invoicing\AppBundle\Menu\MenuBuilder
         arguments:

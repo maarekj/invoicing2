@@ -11,15 +11,15 @@
         <meta charset="UTF-8"/>
 
         {% block head_style %}
-            <link href="{{ app.request.basePath }}/bundles/jmasavapp/bootstrap-3.0.0/css/bootstrap.min.css"
+            <link href="{{ app.request.basePath }}/bundles/invoicingapp/bootstrap-3.0.0/css/bootstrap.min.css"
                   type="text/css" rel="stylesheet" media="screen"/>
-            <link href="{{ app.request.basePath }}/bundles/jmasavapp/bootstrap-3.0.0/css/bootstrap.min.css"
+            <link href="{{ app.request.basePath }}/bundles/invoicingapp/bootstrap-3.0.0/css/bootstrap.min.css"
                   type="text/css" rel="stylesheet" media="screen"/>
             <link href="{{ app.request.basePath }}/bundles/jmabootstrap/select2/select2.css"
                   type="text/css" rel="stylesheet" media="screen"/>
-            <link href="{{ app.request.basePath }}/bundles/jmasavapp/jquery-ui-1.10.3/themes/base/jquery-ui.css"
+            <link href="{{ app.request.basePath }}/bundles/invoicingapp/jquery-ui-1.10.3/themes/base/jquery-ui.css"
                   type="text/css" rel="stylesheet" media="screen"/>
-            <link href="{{ app.request.basePath }}/bundles/jmasavapp/css/style.css"
+            <link href="{{ app.request.basePath }}/bundles/invoicingapp/css/style.css"
                   type="text/css" rel="stylesheet" media="screen"/>
         {% endblock head_style %}
 
@@ -27,11 +27,11 @@
 
         {% block head_script %}
             <script type="text/javascript"
-                    src="{{ app.request.basePath }}/bundles/jmasavapp/jquery/jquery-2.0.3.min.js"></script>
+                    src="{{ app.request.basePath }}/bundles/invoicingapp/jquery/jquery-2.0.3.min.js"></script>
             <script type="text/javascript"
-                    src="{{ app.request.basePath }}/bundles/jmasavapp/jquery-ui-1.10.3/ui/minified/jquery-ui.min.js"></script>
+                    src="{{ app.request.basePath }}/bundles/invoicingapp/jquery-ui-1.10.3/ui/minified/jquery-ui.min.js"></script>
             <script type="text/javascript"
-                    src="{{ app.request.basePath }}/bundles/jmasavapp/jquery-ui-1.10.3/ui/minified/i18n/jquery.ui.datepicker-fr.min.js"></script>
+                    src="{{ app.request.basePath }}/bundles/invoicingapp/jquery-ui-1.10.3/ui/minified/i18n/jquery.ui.datepicker-fr.min.js"></script>
         {% endblock head_script %}
 
         <title>{% block title %}invoicing2 - {{ title|default('') }}{% endblock title %}</title>
@@ -52,7 +52,7 @@
 {% block navbar %}
     {% embed '@MopaBootstrap/Navbar/navbar.html.twig' with { fixedTop: true, inverse: true } %}
 {% block brand %}
-    <a class="navbar-brand" href="#">SAV</a>
+    <a class="navbar-brand" href="#">Invoicing 2</a>
 {% endblock %}
 
     {% block menu %}
@@ -88,12 +88,12 @@
     {% block content_row %}
         <div class="row">
             {% block content %}
-                <div class="col-sm-9">
+                <div class="{{ contentContentClass|default("col-sm-9") }}">
                     {% block content_content %}
                         <strong>Lorem ipsum dolor sit amet...</strong>
                     {% endblock content_content %}
                 </div>
-                <div class="col-sm-3">
+                <div class="{{ contentSidebarClass|default("col-sm-3") }}">
                     {% block content_sidebar %}
                         <h2>Sidebar</h2>
                     {% endblock content_sidebar %}
@@ -104,7 +104,7 @@
 {% block content_div_end %}</div>{% endblock content_div_end %}
     <footer>
         {% block footer %}
-            <p>&copy; Joseph Maarek</a> 2011-2013</p>
+            <p>&copy; Joseph Maarek</a> 2011-2014</p>
         {% endblock footer %}
     </footer>
 {% block container_div_end %}</div><!-- /container -->{% endblock container_div_end %}

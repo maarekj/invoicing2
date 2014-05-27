@@ -2,23 +2,34 @@
 
 {% form_theme form _self %}
 
+{% set contentContentClass = "col-sm-12" %}
+
 {% block before_form %}
 <div>
     {% endblock %}
 
     {% block form_display %}
-        {{ form_row(form.number) }}
-        {{ form_row(form.entrepreneur) }}
-        {{ form_row(form.client) }}
-        {{ form_row(form.tags) }}
-        {{ form_row(form.created) }}
-        {{ form_row(form.footer) }}
-        {{ form_row(form.lines) }}
-        {{ form_rest(form) }}
+        {% set row_options = { horizontal_label_class: 'col-lg-2', horizontal_input_wrapper_class: 'col-lg-10'} %}
+        {{ form_row(form.number, row_options) }}
+        {{ form_row(form.entrepreneur, row_options) }}
+        {{ form_row(form.client, row_options) }}
+        {{ form_row(form.tags, row_options) }}
+        {{ form_row(form.created, row_options) }}
+        {{ form_row(form.footer, row_options) }}
+        {{ form_row(form.lines, row_options) }}
+        {{ form_rest(form, row_options) }}
     {% endblock %}
 
     {% block after_form %}
 </div>
+{% endblock %}
+
+{% block form_submit %}
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </div>
 {% endblock %}
 
 {% block invoicing_invoice_line_collection_widget %}
@@ -48,20 +59,42 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="line in lines">
-                    <td><textarea class="form-control" rows="2"
-                                  ng-model="line.description" {{ _self.generateName("description") }}></textarea></td>
-                    <td><input type="text" class="form-control"
-                               ng-model="line.quantity" {{ _self.generateName("quantity") }} /></td>
-                    <td><input type="text" class="form-control"
-                               ng-model="line.unitPrice" {{ _self.generateName("unitPrice") }} /></td>
-                    <td><input type="text" class="form-control"
-                               ng-model="line.unit" {{ _self.generateName("unit") }} /></td>
-                    <td><input type="text" class="form-control"
-                               ng-model="line.options" {{ _self.generateName("options") }} /></td>
+                    <td ng-class="{ {{ _self.classHasError('line.errors.description') }} }">
+                        <textarea class="form-control" rows="2"
+                                  ng-model="line.description" {{ _self.generateName("description") }}></textarea>
+                        {{ _self.helpBlockError('line.errors.description') }}
+                    </td>
+                    <td ng-class="{ {{ _self.classHasError('line.errors.quantity') }} }">
+                        <input type="text" class="form-control"
+                               ng-model="line.quantity" {{ _self.generateName("quantity") }} />
+                        {{ _self.helpBlockError('line.errors.quantity') }}
+                    </td>
+                    <td ng-class="{ {{ _self.classHasError('line.errors.unitPrice') }} }">
+                        <input type="text" class="form-control"
+                               ng-model="line.unitPrice" {{ _self.generateName("unitPrice") }} />
+                        {{ _self.helpBlockError('line.errors.unitPrice') }}
+                    </td>
+                    <td ng-class="{ {{ _self.classHasError('line.errors.unit') }} }">
+                        <input type="text" class="form-control"
+                               ng-model="line.unit" {{ _self.generateName("unit") }} />
+                        {{ _self.helpBlockError('line.errors.unit') }}
+                    </td>
+                    <td ng-class="{ {{ _self.classHasError('line.errors.options') }} }">
+                        <select class="form-control"
+                                ng-model="line.options" {{ _self.generateName("options") }}>
+                            <option ng-repeat="choice in line.optionsChoices"
+                                    value="{{ "choice.value"|ang }}"
+                                    ng-selected="line.options == choice.value"
+                                    >
+                                {{ "choice.label"|ang }}
+                            </option>
+                        </select>
+                        {{ _self.helpBlockError('line.errors.options') }}
+                    </td>
                     <td>
-                        {{ _self.ang('(line.quantity * line.unitPrice)|currency') }}
+                        {{ '(line.quantity * line.unitPrice)|currency'|ang }}
                         <input type="hidden"
-                               value="{{ _self.ang('line.position') }}" {{ _self.generateName("position") }} />
+                               value="{{ 'line.position'|ang }}" {{ _self.generateName("position") }} />
                     </td>
                     <td>
                         <div class="btn-group">
@@ -80,8 +113,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4"></td>
-                    <td colspan="2">{{ _self.ang("total()|currency") }}</td>
+                    <td colspan="5"></td>
+                    <td colspan="2">{{ "total()|currency"|ang }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -111,16 +144,13 @@
                         'quantity': {{ child.quantity.vars.value|json_encode|raw }},
                         'unitPrice': {{ child.unitPrice.vars.value|json_encode|raw }},
                         'options': {{ child.options.vars.value|json_encode|raw }},
+                        'optionsChoices': {{ child.options.vars.choices|json_encode|raw}},
                         'position': {{ child.position.vars.value|json_encode|raw }},
                         'unit': {{ child.unit.vars.value|json_encode|raw }},
+                        'errors': {{ jsonAllErrors(child)|json_encode|raw }},
                     },
-                    /*
-                    {{ child.quantity.vars.value|json_encode }}
-
-                     */
                     {% endfor %}
                 ];
-
 
                 $scope.addLine = function () {
                     $scope.lines.push({
@@ -128,7 +158,8 @@
                         'unitPrice': 1,
                         'quantity': 1,
                         'options': 'positive',
-                        'position': $scope.lines.length
+                        'position': $scope.lines.length,
+                        'optionsChoices': {{ prototype.options.vars.choices|json_encode|raw }}
                     });
                     arrangeSort();
                 };
@@ -156,7 +187,12 @@
                     var total = 0;
                     for (var i = 0; i < $scope.lines.length; i++) {
                         var line = $scope.lines[i];
-                        total += line.unitPrice * line.quantity;
+
+                        if (line.options === 'negative') {
+                            total -= line.unitPrice * line.quantity;
+                        } else {
+                            total += line.unitPrice * line.quantity;
+                        }
                     }
                     return total;
                 };
@@ -174,9 +210,19 @@
 {% endblock invoicing_invoice_line_collection_javascript %}
 
 {% macro generateName(name) %}
-    name="{{ _self.ang("generateName('" ~ name ~ "', $index)") }}"
+    name="{{ ("generateName('" ~ name ~ "', $index)")|ang }}"
 {% endmacro %}
-{% macro ang(exp) %}{% verbatim %}{{ {% endverbatim %}{{ exp }}{% verbatim %}}}{% endverbatim %}{% endmacro %}
+
+{% macro classHasError(path) %}
+'has-error': {{ path }}.length > 0
+{% endmacro %}
+
+{% macro helpBlockError(path) %}
+    <div class="help-block" ng-show="{{ path }}.length > 0"
+         ng-repeat="error in {{ path }}">
+        {{ 'error'|ang }}
+    </div>
+{% endmacro %}
 
 {% block invoicing_invoice_line_collection_label %}
     {% set widget_add_btn = null %}

@@ -28,3 +28,8 @@ services:
             - @security.role_hierarchy
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    jma_bootstrap.twig.angular_extension:
+        class: Jma\BootstrapBundle\Twig\BootstrapExtension
+        tags:
+            - { name: twig.extension }

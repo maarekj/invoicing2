@@ -28,7 +28,7 @@ class InvoiceLineCollectionType extends AbstractType
                 'horizontal' => false,
                 'label_render' => false,
                 'horizontal_input_wrapper_class' => false,
-            )
+            ),
         ));
     }
 

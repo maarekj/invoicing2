@@ -2,7 +2,6 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: sylius.yml }
-    - { resource: pdf.yml }
     - { resource: app.yml }
 
 framework:
@@ -97,7 +96,7 @@ white_october_pagerfanta:
     default_view: twitter_bootstrap3_translated
     
 mopa_bootstrap:
-    navbar: ~
+    menu: ~
     form:
         show_legend: false
         show_child_legend: false

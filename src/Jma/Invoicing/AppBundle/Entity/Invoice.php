@@ -5,6 +5,7 @@ namespace Jma\Invoicing\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Valid;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -68,6 +69,7 @@ class Invoice
 
     /**
      * @ORM\OneToMany(targetEntity="InvoiceLine", mappedBy="invoice", cascade={"all"}, orphanRemoval=true)
+     * @Valid()
      * @var ArrayCollection<InvoiceLine>
      */
     protected $lines;
