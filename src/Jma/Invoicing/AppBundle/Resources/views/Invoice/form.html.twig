@@ -82,7 +82,7 @@
                     <td ng-class="{ {{ _self.classHasError('line.errors.options') }} }">
                         <select class="form-control"
                                 ng-model="line.options" {{ _self.generateName("options") }}>
-                            <option ng-repeat="choice in line.optionsChoices"
+                            <option ng-repeat="choice in line.choices.options"
                                     value="{{ "choice.value"|ang }}"
                                     ng-selected="line.options == choice.value"
                                     >
@@ -133,8 +133,18 @@
 
                 $scope.fullname = {{ form.vars.full_name|json_encode|raw }};
 
+                var prototypeNames = {
+                    'description': {{ prototype.description.vars.full_name|json_encode|raw }},
+                    'quantity': {{ prototype.quantity.vars.full_name|json_encode|raw }},
+                    'unitPrice': {{ prototype.unitPrice.vars.full_name|json_encode|raw }},
+                    'options': {{ prototype.options.vars.full_name|json_encode|raw }},
+                    'position': {{ prototype.position.vars.full_name|json_encode|raw }},
+                    'unit': {{ prototype.unit.vars.full_name|json_encode|raw }}
+                };
+
                 $scope.generateName = function (name, index) {
-                    return "" + $scope.fullname + "[" + index + "]" + "[" + name + "]";
+                    var fullname = prototypeNames[name];
+                    return "" + fullname.replace(new RegExp({{ prototype.vars.name|json_encode|raw }}, 'g'), index);
                 };
 
                 $scope.lines = [
@@ -144,10 +154,12 @@
                         'quantity': {{ child.quantity.vars.value|json_encode|raw }},
                         'unitPrice': {{ child.unitPrice.vars.value|json_encode|raw }},
                         'options': {{ child.options.vars.value|json_encode|raw }},
-                        'optionsChoices': {{ child.options.vars.choices|json_encode|raw}},
                         'position': {{ child.position.vars.value|json_encode|raw }},
                         'unit': {{ child.unit.vars.value|json_encode|raw }},
                         'errors': {{ jsonAllErrors(child)|json_encode|raw }},
+                        'choices': {
+                            'options': {{ child.options.vars.choices|json_encode|raw}}
+                        }
                     },
                     {% endfor %}
                 ];
@@ -159,7 +171,9 @@
                         'quantity': 1,
                         'options': 'positive',
                         'position': $scope.lines.length,
-                        'optionsChoices': {{ prototype.options.vars.choices|json_encode|raw }}
+                        'choices': {
+                            'options': {{ prototype.options.vars.choices|json_encode|raw }}
+                        }
                     });
                     arrangeSort();
                 };
@@ -214,7 +228,7 @@
 {% endmacro %}
 
 {% macro classHasError(path) %}
-'has-error': {{ path }}.length > 0
+    'has-error': {{ path }}.length > 0
 {% endmacro %}
 
 {% macro helpBlockError(path) %}
