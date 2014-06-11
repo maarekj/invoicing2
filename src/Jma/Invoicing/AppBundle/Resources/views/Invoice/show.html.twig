@@ -52,29 +52,25 @@
         </tbody>
     </table>
 
-    {% if invoice.footer is not empty %}
-        <div class="row">
-            <div class="col-xs-12">
-                <p>{{ invoice.footer }}</p>
-            </div>
+    <div class="row">
+        <div class="col-xs-8">
+            <p>{{ invoice.footer }}</p>
         </div>
-    {% endif %}
-
-    <div class="row text-right">
-        <div class="col-xs-2 col-xs-offset-8">
+        <div class="col-xs-2 text-right">
             <p>
                 <strong>
                     Total:<br>
                 </strong>
             </p>
         </div>
-        <div class="col-xs-2">
+        <div class="col-xs-2 text-right">
             <strong>
                 {{ invoice.total }}&#8239;€<br>
             </strong>
         </div>
     </div>
 
+    <hr/>
 
     <div class="row">
         <div class="col-xs-12">
@@ -106,8 +102,8 @@
                 {{ e.more }}
             </p>
 
-            <p>Dispensé d'immatriculation au registre du commerce
-                et des sociétés (RCS) et au répertoire des métiers (RM)</p>
+            <p><small>Dispensé d'immatriculation au registre du commerce
+                et des sociétés (RCS) et au répertoire des métiers (RM)</small></p>
         </div>
     </div>
 {% endmacro %}
