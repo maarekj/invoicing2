@@ -1,0 +1,150 @@
+{% set e = invoice.entrepreneur %}
+{% set c = invoice.client %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Invoice</title>
+    <link href="{{ app.request.basePath }}/bundles/invoicingapp/bootstrap-3.1.1/css/bootstrap.min.css"
+          type="text/css" rel="stylesheet"/>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Bree+Serif);
+
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: 'Bree Serif', serif;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-5">
+            {{ _self.panelEntrepreneur(e) }}
+        </div>
+        <div class="col-xs-5 col-xs-offset-2 text-right">
+            <h1 class="text-right">FACTURE</h1>
+            {{ _self.panelHeader(invoice, e) }}
+            {{ _self.panelClient(c) }}
+        </div>
+    </div>
+    <!-- / end client details section -->
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th><h4>Description</h4></th>
+            <th><h4>Qté</h4></th>
+            <th><h4>Prix unitaire</h4></th>
+            <th><h4>Montant</h4></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for line in invoice.lines %}
+            <tr>
+                <td>{{ line.description }}</td>
+                <td>{{ line.quantity }}</td>
+                <td class="text-right">{{ line.unitPrice }}&#8239;€ / {{ line.unit }}</td>
+                <td class="text-right">{{ line.total }}&#8239;€</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if invoice.footer is not empty %}
+        <div class="row">
+            <div class="col-xs-12">
+                <p>{{ invoice.footer }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row text-right">
+        <div class="col-xs-2 col-xs-offset-8">
+            <p>
+                <strong>
+                    Total:<br>
+                </strong>
+            </p>
+        </div>
+        <div class="col-xs-2">
+            <strong>
+                {{ invoice.total }}&#8239;€<br>
+            </strong>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <p>
+                TVA non applicable, art. 293 B du CGI<br/>
+                <strong>{{ e.lastname }} {{ e.firstname }}</strong> - {{ e.street }} - {{ e.zipcode }} - {{ e.city }} -
+                <strong>{{ e.siret }}</strong>
+            </p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
+
+{% macro panelEntrepreneur(e) %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4><a href="#">{{ e.lastname }} {{ e.firstname }}</a></h4>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% if e.street is not empty %}{{ e.street }}<br/>{% endif %}
+                {% if e.zipcode is not empty %}{{ e.zipcode }},{% endif %} {% if e.city is not empty %}{{ e.city }}
+                    <br/>{% endif %}
+                {% if e.complement is not empty %}{{ e.complement }}<br/>{% endif %}
+                {% if e.phone %}Téléphone: {{ e.phone }}{% endif %}
+                {{ e.more }}
+            </p>
+
+            <p>Dispensé d'immatriculation au registre du commerce
+                et des sociétés (RCS) et au répertoire des métiers (RM)</p>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro panelClient(c) %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Client: <a href="#">{{ c.name }}</a></h4>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% if c.street is not empty %}{{ c.street }}<br/>{% endif %}
+                {% if c.zipcode is not empty %}{{ c.zipcode }},{% endif %} {% if c.city is not empty %}{{ c.city }}
+                    <br/>{% endif %}
+                {% if c.complement is not empty %}{{ c.complement }}<br/>{% endif %}
+                {% if c.phone %}Téléphone: {{ e.phone }}{% endif %}
+                {{ c.more }}
+            </p>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro panelHeader(invoice, e) %}
+    <div class="row text-right">
+        <div class="col-xs-6">
+            <p>
+                Date: <br/>
+                N°: <br/>
+                SIREN: <br/>
+                SIRET: <br/>
+            </p>
+        </div>
+        <div class="col-xs-6">
+            {{ invoice.created|localizeddate('short', 'none') }}<br>
+            #{{ invoice.number }}<br>
+            {{ e.siren }}<br>
+            {{ e.siret }}<br>
+        </div>
+    </div>
+{% endmacro %}

@@ -40,6 +40,12 @@
                     'icon': 'trash',
                     'size': 'sm'
                     }) }}
+                    {{ common.btn({
+                    'href': path('invoicing_invoice_show', { id: invoice.id }),
+                    'color': 'default',
+                    'icon': 'print',
+                    'size': 'sm'
+                    }) }}
                 </td>
                 <td>{{ invoice.number }}</td>
                 <td>{{ tag.tags(invoice.tags) }}</td>

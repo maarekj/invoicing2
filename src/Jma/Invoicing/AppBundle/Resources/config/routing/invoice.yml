@@ -19,7 +19,13 @@ invoicing_invoice_delete:
     methods: [DELETE]
     defaults:
         _controller: invoicing.controller.invoice:deleteAction
-            
+
+invoicing_invoice_show:
+    pattern: /invoices/{id}
+    methods: [GET]
+    defaults:
+        _controller: invoicing.controller.invoice:showAction
+
 invoicing_invoice_index:
     pattern: /invoices
     methods: [GET, POST]
