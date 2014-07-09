@@ -1,6 +1,7 @@
 {% extends "InvoicingAppBundle:Resource:list.html.twig" %}
 {% import "InvoicingAppBundle::common.html.twig" as common %}
 {% import "InvoicingAppBundle:Tag:macros.html.twig" as tag %}
+{% import _self as self %}
 
 {% set title = 'Liste des factures' %}
 {% set filter_action = path('invoicing_invoice_index') %}
@@ -53,7 +54,17 @@
                     <td>{{ invoice.entrepreneur.username }}</td>
                 {% endif %}
                 <td>{{ invoice.client.name }}</td>
-                <td>{{ invoice.total }} €</td>
+                <td>
+                    {{ invoice.total }} €
+                    {% if invoice.payments|length > 0 %}
+                        <a class="payments-popover"
+                           href="#"
+                           data-placement="right"
+                           data-content="{{ self.paymentsContentPopover(invoice.payments)|e('html_attr') }}">
+                            Paiements
+                        </a>
+                    {% endif %}
+                </td>
                 <td>{{ invoice.created|date('d/m/Y') }}</td>
                 <td>{{ invoice.updated|date('d/m/Y') }}</td>
             </tr>
@@ -73,3 +84,29 @@
     'cls': 'btn-block'
     }) }}
 {% endblock %}
+
+{% block foot_script %}
+    {{ parent() }}
+    <script>
+        jQuery(function () {
+            $('a.payments-popover').popover({
+                trigger: 'hover',
+                html: true
+            });
+        });
+    </script>
+{% endblock %}
+
+{% macro paymentsContentPopover(payments) %}
+    <ul>
+        {% for p in payments %}
+            <li>
+                <strong>{{ p.amount }}€</strong> ({{ p.type }}) le
+                <em>{{ p.created|localizeddate('short', 'none') }}</em>
+                {% if p.description is not empty %}
+                    <p>{{ p.description }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

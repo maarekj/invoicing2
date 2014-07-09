@@ -9,7 +9,7 @@ invoicing_invoice:
 
 invoicing_tag:
     resource: "@InvoicingAppBundle/Resources/config/routing/tag.yml"
-    
+
 invoicing_security_login:
     pattern: /login
     defaults:

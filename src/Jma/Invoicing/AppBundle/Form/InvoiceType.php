@@ -18,38 +18,39 @@ class InvoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('number', 'number', array())
-            ->add('entrepreneur', 'entity', array(
+            ->add('number', 'number', [])
+            ->add('entrepreneur', 'entity', [
                 'class' => 'InvoicingAppBundle:Entrepreneur',
                 'property' => 'username',
                 'query_builder' => function (EntrepreneurRepository $repository) {
                     return $repository->builderAllRestrict();
                 }
-            ))
-            ->add('client', 'select2_entity', array(
+            ])
+            ->add('client', 'select2_entity', [
                 'class' => 'InvoicingAppBundle:Client',
                 'property' => 'name',
                 'query_builder' => function (ClientRepository $repository) {
                     return $repository->builderAllRestrictByCurrentEntrepreneur();
                 }
-            ))
-            ->add('tags', 'select2_entity', array(
+            ])
+            ->add('tags', 'select2_entity', [
                 'class' => 'InvoicingAppBundle:Tag',
                 'property' => 'label',
                 'multiple' => true,
                 'query_builder' => function (TagRepository $repository) {
                     return $repository->builderAllRestrictByCurrentEntrepreneur();
                 }
-            ))
-            ->add('created', 'date', array(
+            ])
+            ->add('created', 'date', [
                 'label' => 'Date de création',
                 'widget' => 'single_text',
                 'required' => false,
-            ))
-            ->add('footer', 'textarea', array(
+            ])
+            ->add('footer', 'textarea', [
                 'required' => false
-            ))
-            ->add('lines', 'invoicing_invoice_line_collection', array());
+            ])
+            ->add('lines', 'invoicing_invoice_line_collection', [])
+            ->add('payments', 'invoicing_payment_collection', []);
     }
 
     /**
@@ -57,9 +58,9 @@ class InvoiceType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'Jma\Invoicing\AppBundle\Entity\Invoice'
-        ));
+        ]);
     }
 
     /**

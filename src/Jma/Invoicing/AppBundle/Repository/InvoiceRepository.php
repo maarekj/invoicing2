@@ -57,7 +57,7 @@ class InvoiceRepository extends EntityRepository implements ContainerAwareInterf
         $maxNumber = $builder
             ->select("MAX($o.number) as max_number")
             ->getQuery()
-            ->getSingleScalarResult() ? : 0;
+            ->getSingleScalarResult() ?: 0;
 
         return $maxNumber + 1;
     }

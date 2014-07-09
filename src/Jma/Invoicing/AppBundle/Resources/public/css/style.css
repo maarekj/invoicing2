@@ -18,3 +18,7 @@ h1 {
 .col-lg-12.select2_entity_select {
     padding: 0px;
 }
+
+.nav-tabs {
+    margin-bottom: 15px;
+}

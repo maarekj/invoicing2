@@ -37,6 +37,8 @@ invoicing_invoice_index:
                     - lines
                     - client
                     - entrepreneur
+                    - payments
+                    - tags
                 current_entrepreneur: true
             paginate: 20
             sortable: true

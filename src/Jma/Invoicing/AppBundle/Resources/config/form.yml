@@ -31,3 +31,13 @@ services:
             - @security.context
         tags:
             - { name: form.type, alias: invoicing_tag}
+
+    jma.invoicing.form_type.payment:
+        class: Jma\Invoicing\AppBundle\Form\PaymentType
+        tags:
+            - { name: form.type, alias: invoicing_payment }
+
+    jma.invoicing.form_type.payment_collection:
+            class: Jma\Invoicing\AppBundle\Form\PaymentCollectionType
+            tags:
+                - { name: form.type, alias: invoicing_payment_collection }

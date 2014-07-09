@@ -75,6 +75,13 @@ class Invoice
     protected $lines;
 
     /**
+     * @ORM\OneToMany(targetEntity="Payment", mappedBy="invoice", cascade={"all"}, orphanRemoval=true)
+     * @Valid()
+     * @var ArrayCollection<Payment>
+     */
+    protected $payments;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist", "merge"})
      * @var ArrayCollection<Tag>
      */
@@ -108,6 +115,30 @@ class Invoice
     {
         $this->lines->removeElement($line);
         $line->setInvoice(null);
+
+        return $this;
+    }
+
+    /**
+     * @param Payment $payment
+     * @return $this
+     */
+    public function addPayment(Payment $payment)
+    {
+        $payment->setInvoice($this);
+        $this->payments[] = $payment;
+
+        return $this;
+    }
+
+    /**
+     * @param Payment $payment
+     * @return $this
+     */
+    public function removePayment(Payment $payment)
+    {
+        $this->payments->removeElement($payment);
+        $payment->setInvoice(null);
 
         return $this;
     }
@@ -198,11 +229,29 @@ class Invoice
     }
 
     /**
-     * @return ArrayCollection<InvoiceLine>
+     * @return ArrayCollection
      */
     public function getLines()
     {
         return $this->lines;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
+
+    /**
+     * @param ArrayCollection $payments
+     * @return Invoice
+     */
+    public function setPayments($payments)
+    {
+        $this->payments = $payments;
+        return $this;
     }
 
     /**
