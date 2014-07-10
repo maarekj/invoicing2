@@ -38,9 +38,8 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
-            new Ensepar\Html2pdfBundle\EnseparHtml2pdfBundle(),
             new Jma\ResourceBundle\JmaResourceBundle(),
-            new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
+            new Jma\BackupBundle\JmaBackupBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

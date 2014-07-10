@@ -121,16 +121,6 @@ jma_bootstrap:
     json:
         pagerfanta: ~
 
-knp_gaufrette:
-    adapters:
-        attachments:
-            local:
-                directory:  %kernel.root_dir%/../web/attachments
-                create:     true
-    filesystems:
-        attachments:
-            adapter: attachments
-
 services: 
     twig.extension.intl:
         class: Twig_Extensions_Extension_Intl

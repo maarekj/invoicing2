@@ -51,9 +51,3 @@ bazinga_faker:
 
 swiftmailer:
     delivery_address:  josephmaarek@gmail.com
-
-services:
-    twig.extension.debug:
-        class: Twig_Extensions_Extension_Debug
-        tags:
-            - { name: twig.extension }

@@ -31,9 +31,8 @@
         "jms/di-extra-bundle": "~1.4",
         "stof/doctrine-extensions-bundle": "~1.1@dev",
         "lexik/form-filter-bundle": "~2.0@dev",
-        "ensepar/html2pdf-bundle": "~1.0",
         "coresphere/console-bundle": "dev-master",
-        "knplabs/knp-gaufrette-bundle": "~0.2"
+        "jma/backup-bundle": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.2@dev"

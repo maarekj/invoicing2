@@ -4,6 +4,7 @@
 /app/cache/*
 /app/config/*.local.yml
 /app/logs/*
+/app/backup
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /build/
