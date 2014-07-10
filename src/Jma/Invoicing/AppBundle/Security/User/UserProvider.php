@@ -2,11 +2,11 @@
 
 namespace Jma\Invoicing\AppBundle\Security\User;
 
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
  * Description of UserProvider

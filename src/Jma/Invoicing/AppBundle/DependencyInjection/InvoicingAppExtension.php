@@ -28,5 +28,25 @@ class InvoicingAppExtension extends Extension
         
         $users = isset($config['users']) ? $config['users'] : array();
         $container->setParameter('invoicing_user_provider.users', $users);
+
+        $this->addClassesToCompile([
+            'Jma\Invoicing\AppBundle\Controller\DefaultController',
+            'Jma\Invoicing\AppBundle\Controller\InvoiceController',
+            'Jma\Invoicing\AppBundle\Controller\SecurityController',
+            'Jma\Invoicing\AppBundle\Repository\ClientRepository',
+            'Jma\Invoicing\AppBundle\Repository\EntrepreneurRepository',
+            'Jma\Invoicing\AppBundle\Repository\InvoiceRepository',
+            'Jma\Invoicing\AppBundle\Repository\TagRepository',
+            'Jma\Invoicing\AppBundle\Security\User\User',
+            'Jma\Invoicing\AppBundle\Form\ClientType',
+            'Jma\Invoicing\AppBundle\Form\EntrepreneurType',
+            'Jma\Invoicing\AppBundle\Form\InvoiceLineCollectionType',
+            'Jma\Invoicing\AppBundle\Form\InvoiceLineType',
+            'Jma\Invoicing\AppBundle\Form\InvoiceType',
+            'Jma\Invoicing\AppBundle\Form\PaymentCollectionType',
+            'Jma\Invoicing\AppBundle\Form\PaymentType',
+            'Jma\Invoicing\AppBundle\Form\TagType',
+
+        ]);
     }
 }

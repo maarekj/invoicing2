@@ -33,6 +33,8 @@ class PaymentType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
             ]);
+
+        $builder->get('amount')->resetViewTransformers();
     }
 
     /**

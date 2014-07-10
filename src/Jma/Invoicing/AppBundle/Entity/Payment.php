@@ -38,7 +38,7 @@ class Payment
     protected $invoice;
 
     /**
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="decimal", precision=10, scale=3)
      * @NotNull()
      * @var double
      */

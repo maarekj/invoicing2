@@ -272,6 +272,7 @@
                     </td>
                     <td ng-class="{ {{ _self.classHasError('payment.errors.amount') }} }">
                         <input type="number" class="form-control"
+                               step="any"
                                ng-model="payment.amount" {{ _self.generateName("amount") }} />
                         {{ _self.helpBlockError('payment.errors.amount') }}
                     </td>
@@ -326,7 +327,7 @@
                     {% for child in form %}
                     {
                         'description': {{ child.description.vars.value|json_encode|raw }},
-                        'amount': {{ child.amount.vars.value|json_encode|raw }},
+                        'amount': {{ child.amount.vars.value|raw }},
                         'type': {{ child.type.vars.value|json_encode|raw }},
                         'created': {{ child.created.vars.value|json_encode|raw }},
                         'errors': {{ jsonAllErrors(child)|json_encode|raw }},
