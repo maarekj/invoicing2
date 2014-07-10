@@ -18,7 +18,8 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('entrepreneur', 'entity', array(
+            ->add('entrepreneurs', 'select2_entity', array(
+                'multiple' => true,
                 'class' => 'InvoicingAppBundle:Entrepreneur',
                 'property' => 'username',
                 'query_builder' => function (EntrepreneurRepository $repo) {

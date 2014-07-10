@@ -38,7 +38,8 @@ class Invoice
     protected $footer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Entrepreneur")
+     * @ORM\ManyToOne(targetEntity="Entrepreneur", cascade={"all"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @NotNull()
      * @var Entrepreneur
      */

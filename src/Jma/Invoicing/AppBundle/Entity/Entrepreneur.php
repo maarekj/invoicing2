@@ -26,7 +26,7 @@ class Entrepreneur
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Client", mappedBy="entrepreneur")
+     * @ORM\ManyToMany(targetEntity="Client", mappedBy="entrepreneurs")
      * @var ArrayCollection
      */
     protected $clients;
@@ -95,22 +95,30 @@ class Entrepreneur
 
     /**
      * @param Client $client
-     * @return Entrepreneur
+     * @return $this
      */
     public function addClient(Client $client)
     {
-        $this->clients[] = ($client);
+        if (false === $this->clients->contains($client)) {
+            $this->clients->add($client);
+        }
+
+        $client->addEntrepreneur($this);
 
         return $this;
     }
 
     /**
      * @param Client $client
-     * @return Entrepreneur
+     * @return $this
      */
     public function removeClient(Client $client)
     {
-        $this->clients->removeElement($client);
+        if (true === $this->clients->contains($client)) {
+            $this->clients->removeElement($client);
+        }
+
+        $client->removeEntrepreneur($this);
 
         return $this;
     }
@@ -121,7 +129,8 @@ class Entrepreneur
      * @param mixed $city
      * @return Entrepreneur
      */
-    public function setCity($city)
+    public
+    function setCity($city)
     {
         $this->city = $city;
         return $this;
@@ -130,7 +139,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getCity()
+    public
+    function getCity()
     {
         return $this->city;
     }
@@ -139,7 +149,8 @@ class Entrepreneur
      * @param \Doctrine\Common\Collections\ArrayCollection $clients
      * @return Entrepreneur
      */
-    public function setClients($clients)
+    public
+    function setClients($clients)
     {
         $this->clients = $clients;
         return $this;
@@ -148,7 +159,8 @@ class Entrepreneur
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getClients()
+    public
+    function getClients()
     {
         return $this->clients;
     }
@@ -157,7 +169,8 @@ class Entrepreneur
      * @param mixed $complement
      * @return Entrepreneur
      */
-    public function setComplement($complement)
+    public
+    function setComplement($complement)
     {
         $this->complement = $complement;
         return $this;
@@ -166,7 +179,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getComplement()
+    public
+    function getComplement()
     {
         return $this->complement;
     }
@@ -175,7 +189,8 @@ class Entrepreneur
      * @param mixed $firstname
      * @return Entrepreneur
      */
-    public function setFirstname($firstname)
+    public
+    function setFirstname($firstname)
     {
         $this->firstname = $firstname;
         return $this;
@@ -184,7 +199,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getFirstname()
+    public
+    function getFirstname()
     {
         return $this->firstname;
     }
@@ -193,7 +209,8 @@ class Entrepreneur
      * @param mixed $id
      * @return Entrepreneur
      */
-    public function setId($id)
+    public
+    function setId($id)
     {
         $this->id = $id;
         return $this;
@@ -202,7 +219,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getId()
+    public
+    function getId()
     {
         return $this->id;
     }
@@ -211,7 +229,8 @@ class Entrepreneur
      * @param mixed $lastname
      * @return Entrepreneur
      */
-    public function setLastname($lastname)
+    public
+    function setLastname($lastname)
     {
         $this->lastname = $lastname;
         return $this;
@@ -220,7 +239,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getLastname()
+    public
+    function getLastname()
     {
         return $this->lastname;
     }
@@ -229,7 +249,8 @@ class Entrepreneur
      * @param mixed $more
      * @return Entrepreneur
      */
-    public function setMore($more)
+    public
+    function setMore($more)
     {
         $this->more = $more;
         return $this;
@@ -238,7 +259,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getMore()
+    public
+    function getMore()
     {
         return $this->more;
     }
@@ -247,7 +269,8 @@ class Entrepreneur
      * @param mixed $phone
      * @return Entrepreneur
      */
-    public function setPhone($phone)
+    public
+    function setPhone($phone)
     {
         $this->phone = $phone;
         return $this;
@@ -256,7 +279,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getPhone()
+    public
+    function getPhone()
     {
         return $this->phone;
     }
@@ -265,7 +289,8 @@ class Entrepreneur
      * @param mixed $siren
      * @return Entrepreneur
      */
-    public function setSiren($siren)
+    public
+    function setSiren($siren)
     {
         $this->siren = $siren;
         return $this;
@@ -274,7 +299,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getSiren()
+    public
+    function getSiren()
     {
         return $this->siren;
     }
@@ -283,7 +309,8 @@ class Entrepreneur
      * @param mixed $siret
      * @return Entrepreneur
      */
-    public function setSiret($siret)
+    public
+    function setSiret($siret)
     {
         $this->siret = $siret;
         return $this;
@@ -292,7 +319,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getSiret()
+    public
+    function getSiret()
     {
         return $this->siret;
     }
@@ -301,7 +329,8 @@ class Entrepreneur
      * @param mixed $street
      * @return Entrepreneur
      */
-    public function setStreet($street)
+    public
+    function setStreet($street)
     {
         $this->street = $street;
         return $this;
@@ -310,7 +339,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getStreet()
+    public
+    function getStreet()
     {
         return $this->street;
     }
@@ -319,7 +349,8 @@ class Entrepreneur
      * @param mixed $username
      * @return Entrepreneur
      */
-    public function setUsername($username)
+    public
+    function setUsername($username)
     {
         $this->username = $username;
         return $this;
@@ -328,7 +359,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getUsername()
+    public
+    function getUsername()
     {
         return $this->username;
     }
@@ -337,7 +369,8 @@ class Entrepreneur
      * @param mixed $zipcode
      * @return Entrepreneur
      */
-    public function setZipcode($zipcode)
+    public
+    function setZipcode($zipcode)
     {
         $this->zipcode = $zipcode;
         return $this;
@@ -346,7 +379,8 @@ class Entrepreneur
     /**
      * @return mixed
      */
-    public function getZipcode()
+    public
+    function getZipcode()
     {
         return $this->zipcode;
     }

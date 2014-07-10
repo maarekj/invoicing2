@@ -26,11 +26,10 @@ class Client
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Entrepreneur", inversedBy="clients")
-     * @NotNull()
-     * @var Entrepreneur
+     * @ORM\ManyToMany(targetEntity="Entrepreneur", inversedBy="clients")
+     * @var ArrayCollection
      */
-    protected $entrepreneur;
+    protected $entrepreneurs;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
@@ -108,24 +107,6 @@ class Client
     public function getComplement()
     {
         return $this->complement;
-    }
-
-    /**
-     * @param \Jma\Invoicing\AppBundle\Entity\Entrepreneur $entrepreneur
-     * @return Client
-     */
-    public function setEntrepreneur($entrepreneur)
-    {
-        $this->entrepreneur = $entrepreneur;
-        return $this;
-    }
-
-    /**
-     * @return \Jma\Invoicing\AppBundle\Entity\Entrepreneur
-     */
-    public function getEntrepreneur()
-    {
-        return $this->entrepreneur;
     }
 
     /**
@@ -251,6 +232,54 @@ class Client
     public function setPhone($phone)
     {
         $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEntrepreneurs()
+    {
+        return $this->entrepreneurs;
+    }
+
+    /**
+     * @param ArrayCollection $entrepreneurs
+     * @return Client
+     */
+    public function setEntrepreneurs($entrepreneurs)
+    {
+        $this->entrepreneurs = $entrepreneurs;
+        return $this;
+    }
+
+    /**
+     * @param Entrepreneur $entrepreneur
+     * @return $this
+     */
+    public function addEntrepreneur(Entrepreneur $entrepreneur)
+    {
+        if (false === $this->entrepreneurs->contains($entrepreneur)) {
+            $this->entrepreneurs->add($entrepreneur);
+        }
+
+        $entrepreneur->addClient($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Entrepreneur $entrepreneur
+     * @return $this
+     */
+    public function removeEntrepreneur(Entrepreneur $entrepreneur)
+    {
+        if (true === $this->entrepreneurs->contains($entrepreneur)) {
+            $this->entrepreneurs->removeElement($entrepreneur);
+        }
+
+        $entrepreneur->removeClient($this);
+
         return $this;
     }
 }

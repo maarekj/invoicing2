@@ -28,6 +28,7 @@ class InvoiceLine
 
     /**
      * @ORM\ManyToOne(targetEntity="Invoice", inversedBy="lines")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @NotNull()
      * @var Invoice
      */

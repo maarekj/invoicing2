@@ -16,9 +16,7 @@
             <th>Code postal</th>
             <th>Complement</th>
             <th>Forme légale</th>
-            {% if is_granted("ROLE_ADMIN") %}
-                <th>Entrepreneur</th>
-            {% endif %}
+            <th>Entrepreneurs</th>
         </tr>
         </thead>
         <tbody>
@@ -46,9 +44,13 @@
                 <td>{{ client.zipcode }}</td>
                 <td>{{ client.complement }}</td>
                 <td>{{ client.legalForm }}</td>
-                {% if is_granted("ROLE_ADMIN") %}
-                    <td>{{ client.entrepreneur.username|default("") }}</td>
-                {% endif %}
+                <td>
+                    <ul>
+                        {% for entrepreneur in client.entrepreneurs %}
+                            <li>{{ entrepreneur.username|default("") }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

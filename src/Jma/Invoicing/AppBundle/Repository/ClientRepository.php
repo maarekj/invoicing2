@@ -29,7 +29,7 @@ class ClientRepository extends EntityRepository implements ContainerAwareInterfa
      */
     public function builderAllRestrictByCurrentEntrepreneur()
     {
-        return $this->builderAll(array('current_entrepreneur' => true));
+        return $this->builderAll(array('current_entrepreneurs' => true));
     }
 
     /**
@@ -39,7 +39,12 @@ class ClientRepository extends EntityRepository implements ContainerAwareInterfa
      */
     protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null)
     {
-        $criteria = $this->getEntrepreneurRepository()->criteriaCurrentEntrepreneur($criteria);
+        $criteria = $this->getEntrepreneurRepository()->criteriaCurrentEntrepreneurs($queryBuilder, $criteria, $this->getAlias());
         parent::applyCriteria($queryBuilder, $criteria);
+    }
+
+    protected function getAlias()
+    {
+        return "client";
     }
 }

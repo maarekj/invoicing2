@@ -27,6 +27,6 @@ invoicing_client_index:
         _controller: invoicing.controller.client:indexFilterableAction
         _sylius:
             criteria:
-                current_entrepreneur: true
+                current_entrepreneurs: true
             paginate: 20
             sortable: true

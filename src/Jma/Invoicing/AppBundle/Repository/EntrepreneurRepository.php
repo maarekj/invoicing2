@@ -3,6 +3,7 @@
 namespace Jma\Invoicing\AppBundle\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Jma\Invoicing\AppBundle\Entity\Entrepreneur;
 use Jma\ResourceBundle\Repository\EntityRepository;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -70,11 +71,30 @@ class EntrepreneurRepository extends EntityRepository implements ContainerAwareI
         if ($criteria !== null) {
             if (array_key_exists('current_entrepreneur', $criteria) && true === $criteria['current_entrepreneur']) {
                 if (false === $this->getSecurity()->isGranted('ROLE_ADMIN')) {
-                    $criteria['entrepreneur'] = $this->getUser()->getEntrepreneur();
+                    $criteria[$field] = $this->getUser()->getEntrepreneur();
                 }
             }
 
             unset($criteria['current_entrepreneur']);
+        }
+
+        return $criteria;
+    }
+
+    public function criteriaCurrentEntrepreneurs(QueryBuilder $queryBuilder, array $criteria = null, $alias, $field = 'entrepreneurs')
+    {
+        if ($criteria !== null) {
+            if (array_key_exists('current_entrepreneurs', $criteria) && true === $criteria['current_entrepreneurs']) {
+                if (false === $this->getSecurity()->isGranted('ROLE_ADMIN')) {
+
+                    $entrepreneur = $this->getUser()->getEntrepreneur()->getId();
+
+                    $queryBuilder->innerJoin("$alias.$field", $this->getAlias())
+                        ->andWhere($queryBuilder->expr()->in($this->getPropertyName('id'), $entrepreneur));
+                }
+            }
+
+            unset($criteria['current_entrepreneurs']);
         }
 
         return $criteria;
@@ -85,7 +105,8 @@ class EntrepreneurRepository extends EntityRepository implements ContainerAwareI
      *
      * @param array $criteria
      */
-    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null)
+    protected
+    function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null)
     {
         if ($criteria !== null && array_key_exists('current_entrepreneur', $criteria) && true === $criteria['current_entrepreneur']) {
             $queryBuilder = $this->restrictBuilder($queryBuilder);
@@ -95,7 +116,8 @@ class EntrepreneurRepository extends EntityRepository implements ContainerAwareI
         parent::applyCriteria($queryBuilder, $criteria);
     }
 
-    protected function getAlias()
+    protected
+    function getAlias()
     {
         return "entrepreneur";
     }
