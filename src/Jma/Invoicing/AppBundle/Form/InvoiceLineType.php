@@ -20,18 +20,19 @@ class InvoiceLineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description', 'text', array('required' => true))
-            ->add('quantity', 'number', array('required' => true))
-            ->add('unitPrice', 'number', array('required' => true))
+            ->add('description', 'text', ['required' => true])
+            ->add('quantity', 'number', ['required' => true])
+            ->add('unitPrice', 'number', ['required' => true])
             ->add('options', 'choice', array(
                 'required' => true,
-                'choices' => array(
+                'choices' => [
                     InvoiceLine::OPTIONS_POSITIVE => "+",
                     InvoiceLine::OPTIONS_NEGATIVE => "-",
-                )
+                    InvoiceLine::OPTIONS_FREE => "offert",
+                ]
             ))
-            ->add('unit', 'text', array('required' => true))
-            ->add('position', 'integer', array('required' => true));
+            ->add('unit', 'text', ['required' => true])
+            ->add('position', 'integer', ['required' => true]);
 
         $builder->get('quantity')->resetViewTransformers();
         $builder->get('unitPrice')->resetViewTransformers();
@@ -42,9 +43,7 @@ class InvoiceLineType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Jma\Invoicing\AppBundle\Entity\InvoiceLine'
-        ));
+        $resolver->setDefaults(['data_class' => 'Jma\Invoicing\AppBundle\Entity\InvoiceLine']);
     }
 
     /**

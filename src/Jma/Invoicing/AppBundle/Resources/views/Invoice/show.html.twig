@@ -46,7 +46,15 @@
                 <td>{{ line.description }}</td>
                 <td>{{ line.quantity }}</td>
                 <td class="text-right">{{ line.unitPrice }}&#8239;€ / {{ line.unit }}</td>
-                <td class="text-right">{{ line.total }}&#8239;€</td>
+                <td class="text-right">
+                    {% if line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_FREE') %}
+                        <strong>Offert</strong> <small>{{ line.total }}&#8239;€</small>
+                    {% elseif line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_NEGATIVE') %}
+                        -{{ line.total }}&#8239;€
+                    {% else %}
+                        {{ line.total }}&#8239;€
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

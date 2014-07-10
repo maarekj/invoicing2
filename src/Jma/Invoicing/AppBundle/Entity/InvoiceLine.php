@@ -18,6 +18,7 @@ class InvoiceLine
 {
     const OPTIONS_POSITIVE = "positive";
     const OPTIONS_NEGATIVE = "negative";
+    const OPTIONS_FREE = "free";
 
     /**
      * @ORM\Id
@@ -74,11 +75,7 @@ class InvoiceLine
 
     public function getTotal()
     {
-        if ($this->getOptions() === self::OPTIONS_NEGATIVE) {
-            return -($this->quantity * $this->getUnitPrice());
-        } else {
-            return $this->quantity * $this->getUnitPrice();
-        }
+        return $this->quantity * $this->getUnitPrice();
     }
 
     // GETTER / SETTER

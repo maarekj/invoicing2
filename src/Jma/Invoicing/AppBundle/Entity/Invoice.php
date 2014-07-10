@@ -276,7 +276,13 @@ class Invoice
     public function getTotal()
     {
         return array_reduce($this->getLines()->map(function (InvoiceLine $line) {
-            return $line->getTotal();
+            if ($line->getOptions() === InvoiceLine::OPTIONS_NEGATIVE) {
+                return -1 * $line->getTotal();
+            } else if ($line->getOptions() === InvoiceLine::OPTIONS_FREE) {
+                return 0;
+            } else {
+                return $line->getTotal();
+            }
         })->getValues(), function ($a, $b) {
             return $a + $b;
         }, 0);
