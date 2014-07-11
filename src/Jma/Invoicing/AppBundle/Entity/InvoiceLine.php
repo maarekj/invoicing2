@@ -19,6 +19,7 @@ class InvoiceLine
     const OPTIONS_POSITIVE = "positive";
     const OPTIONS_NEGATIVE = "negative";
     const OPTIONS_FREE = "free";
+    const OPTIONS_PERCENT = "percent";
 
     /**
      * @ORM\Id
@@ -75,7 +76,12 @@ class InvoiceLine
 
     public function getTotal()
     {
-        return $this->quantity * $this->getUnitPrice();
+        if ($this->getOptions() === self::OPTIONS_PERCENT) {
+            $total = $this->getInvoice()->getTotalWithoutPercent();
+            return $total * $this->getUnitPrice() / 100.0;
+        } else {
+            return $this->quantity * $this->getUnitPrice();
+        }
     }
 
     // GETTER / SETTER

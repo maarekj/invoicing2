@@ -19,26 +19,27 @@ class BootstrapExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('ang', array($this, 'ang'), array(
+        return [
+            new \Twig_SimpleFilter('ang', [$this, 'ang'], [
                 'pre_escape' => 'html',
-                'is_safe' => array('html')
-            ))
-        );
+                'is_safe' => ['html']
+            ])
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('jsonErrors', array($this, 'jsonErrors')),
-            new \Twig_SimpleFunction('jsonAllErrors', array($this, 'jsonAllErrors'))
-        );
+        return [
+            new \Twig_SimpleFunction('jsonErrors', [$this, 'jsonErrors']),
+            new \Twig_SimpleFunction('jsonAllErrors', [$this, 'jsonAllErrors']),
+            new \Twig_SimpleFunction('attrs', [$this, 'attrs'], ['needs_environment' => true])
+        ];
     }
 
 
     public function jsonAllErrors(FormView $form)
     {
-        $errors = array();
+        $errors = [];
 
         foreach ($form as $key => $child) {
             $errors[$key] = $this->jsonErrors($child);
@@ -49,7 +50,7 @@ class BootstrapExtension extends \Twig_Extension
 
     public function jsonErrors(FormView $form)
     {
-        $errors = array();
+        $errors = [];
 
         foreach ($form->vars['errors'] as $error) {
             $errors[] = $error->getMessage();
@@ -61,6 +62,18 @@ class BootstrapExtension extends \Twig_Extension
     public function ang($text)
     {
         return "{{" . $text . "}}";
+    }
+
+    public function attrs(\Twig_Environment $env, $attrs)
+    {
+        $str = "";
+
+        foreach ($attrs as $attr => $value) {
+            $value = \twig_escape_filter($env, $value, "html_attr");
+            $str .= $attr . "=" . json_encode($value);
+        }
+
+        return $str;
     }
 
 

@@ -44,17 +44,24 @@
         {% for line in invoice.lines %}
             <tr>
                 <td>{{ line.description }}</td>
-                <td>{{ line.quantity }}</td>
-                <td class="text-right">{{ line.unitPrice }}&#8239;€ / {{ line.unit }}</td>
-                <td class="text-right">
-                    {% if line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_FREE') %}
-                        <strong>Offert</strong> <small>{{ line.total }}&#8239;€</small>
-                    {% elseif line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_NEGATIVE') %}
-                        -{{ line.total }}&#8239;€
-                    {% else %}
-                        {{ line.total }}&#8239;€
-                    {% endif %}
-                </td>
+                {% if line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_PERCENT') %}
+                    <td class="text-right" colspan="3">
+                        -{{ line.unitPrice }}% ({{ line.total }}&#8239;€)
+                    </td>
+                {% else %}
+                    <td>{{ line.quantity }}</td>
+                    <td class="text-right">{{ line.unitPrice }}&#8239;€ / {{ line.unit }}</td>
+                    <td class="text-right">
+                        {% if line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_FREE') %}
+                            <strong>Offert</strong>
+                            <small>{{ line.total }}&#8239;€</small>
+                        {% elseif line.options == constant('Jma\\Invoicing\\AppBundle\\Entity\\InvoiceLine::OPTIONS_NEGATIVE') %}
+                            -{{ line.total }}&#8239;€
+                        {% else %}
+                            {{ line.total }}&#8239;€
+                        {% endif %}
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
@@ -110,8 +117,11 @@
                 {{ e.more }}
             </p>
 
-            <p><small>Dispensé d'immatriculation au registre du commerce
-                et des sociétés (RCS) et au répertoire des métiers (RM)</small></p>
+            <p>
+                <small>Dispensé d'immatriculation au registre du commerce
+                    et des sociétés (RCS) et au répertoire des métiers (RM)
+                </small>
+            </p>
         </div>
     </div>
 {% endmacro %}

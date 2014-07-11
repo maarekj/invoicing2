@@ -29,6 +29,7 @@ class InvoiceLineType extends AbstractType
                     InvoiceLine::OPTIONS_POSITIVE => "+",
                     InvoiceLine::OPTIONS_NEGATIVE => "-",
                     InvoiceLine::OPTIONS_FREE => "offert",
+                    InvoiceLine::OPTIONS_PERCENT => "%",
                 ]
             ))
             ->add('unit', 'text', ['required' => true])

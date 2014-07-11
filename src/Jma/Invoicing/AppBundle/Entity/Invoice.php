@@ -2,6 +2,7 @@
 
 namespace Jma\Invoicing\AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -275,17 +276,47 @@ class Invoice
 
     public function getTotal()
     {
-        return array_reduce($this->getLines()->map(function (InvoiceLine $line) {
+        $sum = function (Collection $collection) {
+            return array_reduce($collection->getValues(), function ($a, $b) {
+                return $a + $b;
+            }, 0);
+        };
+
+        $total = $this->getTotalWithoutPercent();
+
+        $percents = $sum($this->getLines()->filter(function (InvoiceLine $line) {
+            return $line->getOptions() === InvoiceLine::OPTIONS_PERCENT;
+        })->map(function (InvoiceLine $line) {
+            return $line->getUnitPrice();
+        }));
+
+        if ($percents > 0) {
+            $amount = $total * $percents / 100.0;
+            $total -= $amount;
+        }
+
+        return $total;
+    }
+
+    public function getTotalWithoutPercent()
+    {
+        $sum = function (Collection $collection) {
+            return array_reduce($collection->getValues(), function ($a, $b) {
+                return $a + $b;
+            }, 0);
+        };
+
+        return $sum($this->getLines()->map(function (InvoiceLine $line) {
             if ($line->getOptions() === InvoiceLine::OPTIONS_NEGATIVE) {
                 return -1 * $line->getTotal();
             } else if ($line->getOptions() === InvoiceLine::OPTIONS_FREE) {
                 return 0;
+            } else if ($line->getOptions() === InvoiceLine::OPTIONS_PERCENT) {
+                return 0;
             } else {
                 return $line->getTotal();
             }
-        })->getValues(), function ($a, $b) {
-            return $a + $b;
-        }, 0);
+        }));
     }
 
     /**

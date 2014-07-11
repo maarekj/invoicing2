@@ -72,44 +72,24 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="line in lines">
-                    <td ng-class="{ {{ _self.classHasError('line.errors.description') }} }">
-                        <textarea class="form-control" rows="2"
-                                  ng-model="line.description" {{ _self.generateName("description") }}></textarea>
-                        {{ _self.helpBlockError('line.errors.description') }}
-                    </td>
-                    <td ng-class="{ {{ _self.classHasError('line.errors.quantity') }} }">
-                        <input type="text" class="form-control"
-                               ng-model="line.quantity" {{ _self.generateName("quantity") }} />
-                        {{ _self.helpBlockError('line.errors.quantity') }}
-                    </td>
-                    <td ng-class="{ {{ _self.classHasError('line.errors.unitPrice') }} }">
-                        <input type="text" class="form-control"
-                               ng-model="line.unitPrice" {{ _self.generateName("unitPrice") }} />
-                        {{ _self.helpBlockError('line.errors.unitPrice') }}
-                    </td>
-                    <td ng-class="{ {{ _self.classHasError('line.errors.unit') }} }">
-                        <input type="text" class="form-control"
-                               ng-model="line.unit" {{ _self.generateName("unit") }} />
-                        {{ _self.helpBlockError('line.errors.unit') }}
-                    </td>
-                    <td ng-class="{ {{ _self.classHasError('line.errors.options') }} }">
-                        <select class="form-control"
-                                ng-model="line.options" {{ _self.generateName("options") }}>
-                            <option ng-repeat="choice in line.choices.options"
-                                    value="{{ "choice.value"|ang }}"
-                                    ng-selected="line.options == choice.value"
-                                    >
-                                {{ "choice.label"|ang }}
-                            </option>
-                        </select>
-                        {{ _self.helpBlockError('line.errors.options') }}
-                    </td>
+                    {{ _self.td('line', 'description', 'textarea') }}
+                    {{ _self.td('line', 'quantity', 'text', { "ng-if": "line.options != 'percent'" }) }}
+                    {{ _self.td('line', 'unitPrice', 'text', { "ng-if": "line.options != 'percent'" }) }}
+                    {{ _self.td('line', 'unit', 'text', { "ng-if": "line.options != 'percent'" }) }}
+                    {{ _self.td('line', 'unitPrice', 'text', {
+                    "ng-if": "line.options == 'percent'",
+                    "colspan": '3'
+                    }) }}
+                    {{ _self.td('line', 'options', 'select') }}
                     <td>
-                        <small ng-if="line.options == 'negative'">-</small>
-                        {{ '(line.quantity * line.unitPrice)|currency'|ang }}
+                        {{ 'totalLine(line)'|ang }}
                         <small ng-if="line.options == 'free'">"Offert"</small>
-                        <input type="hidden"
-                               value="{{ 'line.position'|ang }}" {{ _self.generateName("position") }} />
+                        {{ _self.hidden('line', 'position') }}
+
+                        <div ng-if="line.options == 'percent'">
+                            {{ _self.hidden('line', 'quantity') }}
+                            {{ _self.hidden('line', 'unit') }}
+                        </div>
                     </td>
                     <td>
                         <div class="btn-group">
@@ -145,9 +125,7 @@
         jQuery(function () {
             var app = angular.module('invoicing_invoice_line_collection_app', ['ngLocale', 'preventDefault'])
 
-            app.controller('mainController', function ($scope) {
-                $scope.test = "test";
-
+            app.controller('mainController', function ($scope, currencyFilter) {
                 $scope.fullname = {{ form.vars.full_name|json_encode|raw }};
 
                 var prototypeNames = {
@@ -180,6 +158,16 @@
                     },
                     {% endfor %}
                 ];
+
+                $scope.$watch('lines', function (newValue) {
+                    for (var i = 0; i < $scope.lines.length; i++) {
+                        var line = $scope.lines[i];
+                        if (line.options == 'percent') {
+                            line.unit = 'percent';
+                            line.quantity = 1;
+                        }
+                    }
+                }, true);
 
                 $scope.addLine = function () {
                     $scope.lines.push({
@@ -215,7 +203,8 @@
                 };
 
                 $scope.total = function () {
-                    var total = 0;
+                    var percents = 0.0;
+                    var total = 0.0;
                     for (var i = 0; i < $scope.lines.length; i++) {
                         var line = $scope.lines[i];
 
@@ -223,11 +212,68 @@
                             total -= line.unitPrice * line.quantity;
                         } else if (line.options === 'free') {
                             total += 0;
+                        } else if (line.options === 'percent') {
+                            percents += line.unitPrice;
                         } else {
                             total += line.unitPrice * line.quantity;
                         }
                     }
+
+                    if (percents > 0) {
+                        var discount = total * percents / 100;
+                        total -= discount;
+                    }
+
                     return total;
+                };
+
+                $scope.getPercentAmount = function (percent) {
+                    var total = 0.0;
+                    for (var i = 0; i < $scope.lines.length; i++) {
+                        var line = $scope.lines[i];
+
+                        if (line.options === 'negative') {
+                            total -= line.unitPrice * line.quantity;
+                        } else if (line.options === 'free') {
+                            total += 0;
+                        } else if (line.options === 'percent') {
+                        } else {
+                            total += line.unitPrice * line.quantity;
+                        }
+                    }
+
+                    var discount = total * percent / 100;
+
+                    return discount;
+                };
+
+                $scope.totalWithoutPercents = function () {
+                    var total = 0.0;
+                    for (var i = 0; i < $scope.lines.length; i++) {
+                        var line = $scope.lines[i];
+
+                        if (line.options === 'negative') {
+                            total -= line.unitPrice * line.quantity;
+                        } else if (line.options === 'free') {
+                            total += 0;
+                        } else if (line.options === 'percent') {
+                        } else {
+                            total += line.unitPrice * line.quantity;
+                        }
+                    }
+
+                    return total;
+                };
+
+                $scope.totalLine = function (line) {
+                    var o = line.options;
+                    if (o === 'free' || o === 'positive') {
+                        return currencyFilter(line.quantity * line.unitPrice);
+                    } else if (o === 'negative') {
+                        return "-" + currencyFilter(line.quantity * line.unitPrice);
+                    } else if (o === 'percent') {
+                        return "-" + line.unitPrice + "%" + " (" + currencyFilter($scope.getPercentAmount(line.unitPrice)) + ")";
+                    }
                 };
 
                 var arrangeSort = function () {
@@ -313,8 +359,6 @@
             var app = angular.module('invoicing_payment_collection_app', ['ngLocale', 'preventDefault'])
 
             app.controller('mainController', function ($scope) {
-                $scope.test = "test";
-
                 $scope.fullname = {{ form.vars.full_name|json_encode|raw }};
 
                 var prototypeNames = {
@@ -400,3 +444,84 @@
     {{ block('form_label') }}
 {% endblock invoicing_payment_collection_label %}
 
+{% macro input(type, entity, field, attrs, options) %}
+    {% import _self as self %}
+
+    {% set attrs = attrs|default(null) is null ? {} : attrs %}
+    {% set options = options|default(null) is null ? {} : options %}
+    {% set errorField = entity ~ '.errors.' ~ field %}
+
+    <input type="{{ type }}" class="form-control"
+           ng-model="{{ entity ~ '.' ~ field }}"
+            {{ attrs(attrs)|raw }}
+            {{ _self.generateName(field) }} />
+    {{ self.helpBlockError(errorField) }}
+{% endmacro %}
+
+{% macro textarea(entity, field, attrs, options) %}
+    {% import _self as self %}
+
+    {% set attrs = attrs|default(null) is null ? {} : attrs %}
+    {% set options = options|default(null) is null ? {} : options %}
+    {% set errorField = entity ~ '.errors.' ~ field %}
+
+    <textarea class="form-control" rows="2"
+              ng-model="{{ entity ~ '.' ~ field }}"
+            {{ attrs(attrs)|raw }}
+            {{ self.generateName(field) }}></textarea>
+    {{ self.helpBlockError(errorField) }}
+{% endmacro %}
+
+{% macro select(entity, field, attrs, options) %}
+    {% import _self as self %}
+
+    {% set attrs = attrs|default(null) is null ? {} : attrs %}
+    {% set options = options|default(null) is null ? {} : options %}
+    {% set errorField = entity ~ '.errors.' ~ field %}
+
+    <select class="form-control"
+            ng-model="{{ entity ~ '.' ~ field }}"
+            {{ _self.generateName(field) }}
+            {{ attrs(attrs)|raw }}>
+        <option ng-repeat="choice in {{ entity ~ '.choices.' ~ field }}"
+                value="{{ "choice.value"|ang }}"
+                ng-selected="{{ entity ~ '.' ~ field }} == choice.value"
+                >
+            {{ "choice.label"|ang }}
+        </option>
+    </select>
+    {{ self.helpBlockError(errorField) }}
+{% endmacro %}
+
+{% macro hidden(entity, field, attrs, options) %}
+    {% import _self as self %}
+
+    {% set attrs = attrs|default(null) is null ? {} : attrs %}
+    {% set options = options|default(null) is null ? {} : options %}
+
+    <input type="hidden"
+           value="{{ (entity ~ '.' ~ field) |ang }}"
+            {{ _self.generateName(field) }}
+            {{ attrs(attrs)|raw }} />
+{% endmacro %}
+
+
+
+{% macro td(entity, field, type, tdAttrs, inputAttrs, inputOptions) %}
+    {% import _self as self %}
+
+    {% set tdAttrs = tdAttrs|default(null) is null ? {} : tdAttrs %}
+    {% set errorField = entity ~ '.errors.' ~ field %}
+
+    <td ng-class="{ {{ self.classHasError(errorField) }} }"
+            {{ attrs(tdAttrs)|raw }}>
+
+        {% if type == 'textarea' %}
+            {{ self.textarea(entity, field, tdAttrs|default(null), inputOptions|default(null)) }}
+        {% elseif type == 'text' %}
+            {{ self.input('text', entity, field, tdAttrs|default(null), inputOptions|default(null)) }}
+        {% elseif type == 'select' %}
+            {{ self.select(entity, field, tdAttrs|default(null), inputOptions|default(null)) }}
+        {% endif %}
+    </td>
+{% endmacro %}
