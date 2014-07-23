@@ -38,7 +38,7 @@ class Tag
 
     /**
      * @ORM\ManyToOne(targetEntity="Entrepreneur")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Entrepreneur
      */
     protected $entrepreneur;

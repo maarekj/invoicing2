@@ -32,6 +32,7 @@ class Payment
 
     /**
      * @ORM\ManyToOne(targetEntity="Invoice", inversedBy="payments")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @NotNull()
      * @var Invoice
      */

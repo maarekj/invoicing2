@@ -3,7 +3,6 @@
 namespace Jma\Invoicing\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\NotNull;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -71,13 +70,19 @@ class Client
      */
     protected $phone;
 
+    public function __construct()
+    {
+        $this->entrepreneurs = new ArrayCollection();
+    }
+
     // GETTER / SETTER
 
     /**
      * @param mixed $city
      * @return Client
      */
-    public function setCity($city)
+    public
+    function setCity($city)
     {
         $this->city = $city;
         return $this;
@@ -86,7 +91,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getCity()
+    public
+    function getCity()
     {
         return $this->city;
     }
@@ -95,7 +101,8 @@ class Client
      * @param mixed $complement
      * @return Client
      */
-    public function setComplement($complement)
+    public
+    function setComplement($complement)
     {
         $this->complement = $complement;
         return $this;
@@ -104,7 +111,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getComplement()
+    public
+    function getComplement()
     {
         return $this->complement;
     }
@@ -113,7 +121,8 @@ class Client
      * @param mixed $id
      * @return Client
      */
-    public function setId($id)
+    public
+    function setId($id)
     {
         $this->id = $id;
         return $this;
@@ -122,7 +131,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getId()
+    public
+    function getId()
     {
         return $this->id;
     }
@@ -131,7 +141,8 @@ class Client
      * @param mixed $legalForm
      * @return Client
      */
-    public function setLegalForm($legalForm)
+    public
+    function setLegalForm($legalForm)
     {
         $this->legalForm = $legalForm;
         return $this;
@@ -140,7 +151,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getLegalForm()
+    public
+    function getLegalForm()
     {
         return $this->legalForm;
     }
@@ -149,7 +161,8 @@ class Client
      * @param mixed $more
      * @return Client
      */
-    public function setMore($more)
+    public
+    function setMore($more)
     {
         $this->more = $more;
         return $this;
@@ -158,7 +171,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getMore()
+    public
+    function getMore()
     {
         return $this->more;
     }
@@ -167,7 +181,8 @@ class Client
      * @param mixed $name
      * @return Client
      */
-    public function setName($name)
+    public
+    function setName($name)
     {
         $this->name = $name;
         return $this;
@@ -176,7 +191,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getName()
+    public
+    function getName()
     {
         return $this->name;
     }
@@ -185,7 +201,8 @@ class Client
      * @param mixed $street
      * @return Client
      */
-    public function setStreet($street)
+    public
+    function setStreet($street)
     {
         $this->street = $street;
         return $this;
@@ -194,7 +211,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getStreet()
+    public
+    function getStreet()
     {
         return $this->street;
     }
@@ -203,7 +221,8 @@ class Client
      * @param mixed $zipcode
      * @return Client
      */
-    public function setZipcode($zipcode)
+    public
+    function setZipcode($zipcode)
     {
         $this->zipcode = $zipcode;
         return $this;
@@ -212,7 +231,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getZipcode()
+    public
+    function getZipcode()
     {
         return $this->zipcode;
     }
@@ -220,7 +240,8 @@ class Client
     /**
      * @return mixed
      */
-    public function getPhone()
+    public
+    function getPhone()
     {
         return $this->phone;
     }
@@ -229,7 +250,8 @@ class Client
      * @param mixed $phone
      * @return Client
      */
-    public function setPhone($phone)
+    public
+    function setPhone($phone)
     {
         $this->phone = $phone;
         return $this;
@@ -238,7 +260,8 @@ class Client
     /**
      * @return ArrayCollection
      */
-    public function getEntrepreneurs()
+    public
+    function getEntrepreneurs()
     {
         return $this->entrepreneurs;
     }
@@ -247,7 +270,8 @@ class Client
      * @param ArrayCollection $entrepreneurs
      * @return Client
      */
-    public function setEntrepreneurs($entrepreneurs)
+    public
+    function setEntrepreneurs($entrepreneurs)
     {
         $this->entrepreneurs = $entrepreneurs;
         return $this;
@@ -257,7 +281,8 @@ class Client
      * @param Entrepreneur $entrepreneur
      * @return $this
      */
-    public function addEntrepreneur(Entrepreneur $entrepreneur)
+    public
+    function addEntrepreneur(Entrepreneur $entrepreneur)
     {
         if (false === $this->entrepreneurs->contains($entrepreneur)) {
             $this->entrepreneurs->add($entrepreneur);
@@ -272,7 +297,8 @@ class Client
      * @param Entrepreneur $entrepreneur
      * @return $this
      */
-    public function removeEntrepreneur(Entrepreneur $entrepreneur)
+    public
+    function removeEntrepreneur(Entrepreneur $entrepreneur)
     {
         if (true === $this->entrepreneurs->contains($entrepreneur)) {
             $this->entrepreneurs->removeElement($entrepreneur);
