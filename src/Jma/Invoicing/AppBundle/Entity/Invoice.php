@@ -357,6 +357,13 @@ class Invoice
         return $this;
     }
 
+    public function isDevis()
+    {
+        return $this->tags->exists(function ($index, Tag $tag) {
+            return $tag->getLabel() === 'Devis';
+        });
+    }
+
     /**
      * @return ArrayCollection
      */
